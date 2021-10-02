@@ -40,6 +40,7 @@ echo -e "$YELLOW Extracting files...\033[0m"
 url=$(tar -tf _.tar.gz | head -n 1)
 tar --strip-components=2 -xf _.tar.gz ${url}src
 tar --strip-components=1 -xf _.tar.gz ${url}package.json ${url}README.md ${url}CHANGELOG.md ${url}babel.comfig.json
+mv config.example.json config.json
 
 echo -e "$YELLOW Deleting temporary files...\033[0m"
 
