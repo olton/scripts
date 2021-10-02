@@ -4,5 +4,5 @@
 
 ### Mina
 + [x] [Mina Monitor Server](mina/monitor/server)
-+ [ ] [Mina Monitor Client]()
++ [x] [Mina Monitor Client](mina/monitor/client)
 + [ ] [Mina Monitor Cluster]()
