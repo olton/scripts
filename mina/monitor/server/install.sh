@@ -16,7 +16,7 @@ if [ -n "$2" ]
 then
 TARGET=$2
 else
-TARGET="mina-monitor-${VER}"
+TARGET="mina-monitor-server"
 fi
 
 echo -e "$GREEN We are installing Mina Monitor Server ${VER} branch\033[0m"
