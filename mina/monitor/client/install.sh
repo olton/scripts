@@ -50,7 +50,7 @@ npm install
 
 echo -e "$YELLOW Creating config file...\033[0m"
 
-node start
+node start --no-start
 
 echo ""
 echo -e "$GREEN Mina Monitor Client successfully installed...\033[0m"
