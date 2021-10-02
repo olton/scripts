@@ -6,3 +6,5 @@ This script will help you install the necessary additional libraries with one co
 ```shell
 curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/ubuntu-20.04/libs.sh | bash
 ```
+
+Thanks to [StakeTab](https://staketab.com) for this script 
