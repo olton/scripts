@@ -9,7 +9,16 @@ The script is designed to quickly install Mina Monitor Client
 >You must launch script in a PowerShell
 
 ```shell
-iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/olton/scripts/windows/mina/monitor/client/install.ps1'))
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/client/install.ps1'))
+```
+
+#### Options
+
+By default, the script takes files from branch `master` and saves these into folder `mina-monitor-client`.
+You can set a branch or tag where the script will take files and where these files will be saved.
+
+```shell
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/client/install.ps1')) -branch branchName -target targetFolderName
 ```
 
 #### Linux
@@ -17,7 +26,7 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercon
 curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/client/install.sh | bash
 ```
 
-### Options
+#### Options
 
 By default, the script takes files from branch `master` and saves these into folder `~/mina-monitor-client`.
 You can set a branch or tag where the script will take files and where these files will be saved.

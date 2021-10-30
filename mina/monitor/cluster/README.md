@@ -9,7 +9,16 @@ The script is designed to quickly install Mina Monitor Cluster
 >You must launch script in a PowerShell
 
 ```shell
-iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/olton/scripts/windows/mina/monitor/cluster/install.ps1'))
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/cluster/install.ps1'))
+```
+
+#### Options
+
+By default, the script takes files from branch `master` and saves these into folder `mina-monitor-cluster`.
+You can set a branch or tag where the script will take files and where these files will be saved.
+
+```shell
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/cluster/install.ps1')) -branch branchName -target targetFolderName
 ```
 
 #### Linux
@@ -17,9 +26,9 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercon
 curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/cluster/install.sh | bash
 ```
 
-### Options
+#### Options
 
-By default, the script takes files from branch `master` and saves these into folder `~/mina-monitor-client`.
+By default, the script takes files from branch `master` and saves these into folder `~/mina-monitor-cluster`.
 You can set a branch or tag where the script will take files and where these files will be saved.
 To  set branch use first argument for script and for target folder second.
 
