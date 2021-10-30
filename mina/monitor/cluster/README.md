@@ -2,9 +2,9 @@
 
 The script is designed to quickly install Mina Monitor Cluster
 
-### Using
+## Using
 
-#### Windows
+### Windows
 
 >You must launch script in a PowerShell
 
@@ -21,7 +21,7 @@ You can set a branch or tag where the script will take files and where these fil
 & $([scriptblock]::Create((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/cluster/install.ps1'))) -target targetFolderName -branch branchName
 ```
 
-#### Linux
+### Linux
 ```shell
 curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/cluster/install.sh | bash
 ```
