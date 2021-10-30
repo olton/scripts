@@ -9,7 +9,7 @@ The script is designed to quickly install Mina Monitor Cluster
 >You must launch script in a PowerShell
 
 ```shell
-icm https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/cluster/install.ps1
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/olton/scripts/windows/mina/monitor/cluster/install.ps1'))
 ```
 
 #### Linux

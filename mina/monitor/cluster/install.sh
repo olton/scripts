@@ -27,6 +27,7 @@ echo -e "$YELLOW Installing Mina Monitor Cluster...\033[0m"
 
 echo -e "$YELLOW Creating a target directory...\033[0m"
 
+cd ~
 mkdir -p ${TARGET}
 cd ${TARGET}
 
