@@ -46,12 +46,7 @@ echo -e "$YELLOW Deleting temporary files...\033[0m"
 rm _.tar.gz
 
 echo -e "$YELLOW Preparing package.json file...\033[0m"
-
-search = "src/"
-replace = ""
-packageFile = "package.json"
-
-sed -i "s/$search/$replace" $packageFile
+sed -i 's/src\///g' 'package.json'
 
 echo -e "$YELLOW Installing dependencies...\033[0m"
 
