@@ -46,13 +46,15 @@ rm _.tar.gz
 
 echo -e "$YELLOW Installing dependencies...\033[0m"
 
-npm install
+npm install --silent
 
 echo -e "$YELLOW Creating config file...\033[0m"
-
-node start --no-start
+mv config.example.json config.json
+# node start --no-start
 
 echo ""
 echo -e "$GREEN Mina Monitor Client successfully installed...\033[0m"
+echo "Before start, you must define a nodes in the config.json."
+echo "When you complete a node setups, you can launch client with a command npm start"
 echo ""
 

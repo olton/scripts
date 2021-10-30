@@ -3,6 +3,16 @@
 The script is designed to quickly install Mina Monitor Client
 
 ### Using
+
+#### Windows
+
+>You must launch script in a PowerShell
+
+```shell
+icm https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/client/install.ps1
+```
+
+#### Linux
 ```shell
 curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/client/install.sh | bash
 ```
