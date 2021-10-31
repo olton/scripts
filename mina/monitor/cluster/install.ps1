@@ -1,16 +1,16 @@
-param($branch, $target)
+param($b, $t)
 
 cls
 Write-Host -ForegroundColor green "Welcome to Mina Monitor Cluster installer!"
 Write-Host -ForegroundColor white "Copyright 2021 by Serhii Pimenov <serhii@pimenov.com.ua>"
 Write-Host
 
-$br =  $branch
+$br =  $b
 if (!$br) {
     $br = "master"
 }
 
-$trg = $target
+$trg = $t
 if (!$trg) {
     $trg = "mina-monitor-cluster"
 }

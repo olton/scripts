@@ -4,6 +4,7 @@ YELLOW="\033[33m"
 GREEN="\033[32m"
 
 echo -e "$GREEN Welcome to Mina Monitor Client installer!\033[0m"
+echo -e "$GREEN Copyright 2021 by Serhii Pimenov <serhii@pimenov.com.ua>\033[0m"
 
 TARGET="mina-monitor-client"
 BRANCH="master"

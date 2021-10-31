@@ -18,10 +18,13 @@ By default, the script takes files from branch `master` and saves these into fol
 You can set a branch or tag where the script will take files and where these files will be saved.
 
 ```shell
-& $([scriptblock]::Create((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/cluster/install.ps1'))) -target targetFolderName -branch branchName
+& $([scriptblock]::Create((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/cluster/install.ps1'))) -t targetFolderName -b branchName
 ```
 
 ### Linux
+
+>You must have Bash
+
 ```shell
 curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/cluster/install.sh | bash
 ```
