@@ -28,12 +28,10 @@ curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/clie
 
 #### Options
 
-By default, the script takes files from branch `master` and saves these into folder `~/mina-monitor-client`.
+By default, the script takes files from branch `master` and saves these into folder `mina-monitor-client` in the user `HOME` catalog.
 You can set a branch or tag where the script will take files and where these files will be saved.
-To  set branch use first argument for script and for target folder second.
+To  set branch use parameter `-b branchName`, to set target - use parameter `-t targetFolderName`
 
 ```shell
-curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/client/install.sh | bash -s -- branchName targetFolderName
+curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/client/install.sh | bash -s -- -b branchName -t targetFolderName
 ```
-
-> If you need to set a target folder, you must define a branch.
