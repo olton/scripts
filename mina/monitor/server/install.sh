@@ -4,25 +4,20 @@ YELLOW="\033[33m"
 GREEN="\033[32m"
 
 echo -e "$GREEN Welcome to Mina Monitor Server installer!\033[0m"
+echo -e "$GREEN Copyright 2021 by Serhii Pimenov <serhii@pimenov.com.ua>\033[0m"
 
-if [ -n "$1" ]
-then
-VER=$1
-else
-VER="master"
-fi
-
-if [ -n "$2" ]
-then
-TARGET=$2
-else
 TARGET="mina-monitor-server"
-fi
+BRANCH="master"
 
-echo -e "$GREEN We are installing Mina Monitor Server ${VER} branch\033[0m"
-echo -e "$GREEN into a ~/${TARGET} folder\033[0m"
-echo "So, let's go..."
+while getopts ":t:b:" opt
+do
+  case $opt in
+    t) TARGET=$OPTARG;;
+    b) BRANCH=$OPTARG;;
+  esac
+done
 
+echo -e "$GREEN We are installing Mina Monitor Server from branch $BRANCH into ~/$TARGET \033[0m"
 echo -e "$YELLOW Installing Mina Monitor Server...\033[0m"
 
 echo -e "$YELLOW Creating a target directory...\033[0m"
@@ -33,7 +28,7 @@ cd ${TARGET}
 
 echo -e "$YELLOW Downloading a required tarball...\033[0m"
 
-curl -L https://github.com/olton/mina-node-monitor/tarball/${VER} >> _.tar.gz
+curl -L https://github.com/olton/mina-node-monitor/tarball/${BRANCH} >> _.tar.gz
 
 echo -e "$YELLOW Extracting files...\033[0m"
 
