@@ -28,7 +28,7 @@ $sourcesUrl = "https://github.com/olton/mina-monitor-cluster/tarball/$br"
 Write-Host "Downloading sources from $sourcesUrl..."
 Invoke-WebRequest -URI $sourcesUrl -OutFile _.tar.gz
 
-$url = tar -tf _.tar.gz | head -n 1
+$url = tar -tf _.tar.gz | Select -First 1
 
 Write-Host "Sources in $url"
 
