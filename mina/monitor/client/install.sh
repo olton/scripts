@@ -3,15 +3,16 @@
 YELLOW="\033[33m"
 GREEN="\033[32m"
 RED="\033[31m"
+COLOR_STOP="\033[0m"
 
-echo -e "$GREEN Welcome to Mina Monitor Client installer!\033[0m"
-echo -e "$GREEN Copyright 2021 by Serhii Pimenov <serhii@pimenov.com.ua>\033[0m"
+echo -e "$GREEN Welcome to Mina Monitor Client installer!${COLOR_STOP}"
+echo -e "$GREEN Copyright 2021 by Serhii Pimenov <serhii@pimenov.com.ua>${COLOR_STOP}"
 read -p " If you are ready, press [Enter] key to start or Ctrl+C to stop..."
 
-echo -ne "$YELLOW Check NodeJS:\033[0m"
+echo -ne "$YELLOW Check NodeJS:${COLOR_STOP}"
 
 if ! which node > /dev/null; then
-  echo -e "$RED Error! NodeJS not installed! Please install NodeJS v14+ and try again.\033[0m"
+  echo -e "$RED Error! NodeJS not installed! Please install NodeJS v14+ and try again.${COLOR_STOP}"
   exit
 fi
 
@@ -19,11 +20,11 @@ IFS="."
 read -a NODE_VERSION <<< $(node -v | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
 
 if ! [ $NODE_VERSION[0] > 13 ]; then
-  echo -e "$RED Error! NodeJS version is not a valid! You must use version NodeJS >= 14.\033[0m"
+  echo -e "$RED Error! NodeJS version is not a valid! You must use version NodeJS >= 14.${COLOR_STOP}"
   exit
 fi
 
-echo -e "$GREEN...OK... \033[0m"
+echo -e "$GREEN...OK... ${COLOR_STOP}"
 
 TARGET="mina-monitor-client"
 BRANCH="master"
@@ -36,38 +37,38 @@ do
   esac
 done
 
-echo -e "$GREEN We are installing Mina Monitor Client from branch $BRANCH into ~/$TARGET \033[0m"
-echo -e "$YELLOW Installing Mina Monitor Client...\033[0m"
-echo -e "$YELLOW Creating a target directory...\033[0m"
+echo -e "$GREEN We are installing Mina Monitor Client from branch $BRANCH into ~/$TARGET ${COLOR_STOP}"
+echo -e "$YELLOW Installing Mina Monitor Client...${COLOR_STOP}"
+echo -e "$YELLOW Creating a target directory...${COLOR_STOP}"
 
 cd
 mkdir -p ${TARGET}
 cd ${TARGET}
 
-echo -e "$YELLOW Downloading a required tarball...\033[0m"
+echo -e "$YELLOW Downloading a required tarball...${COLOR_STOP}"
 
 curl -L https://github.com/olton/mina-node-monitor/tarball/${BRANCH} >> _.tar.gz
 
-echo -e "$YELLOW Extracting files...\033[0m"
+echo -e "$YELLOW Extracting files...${COLOR_STOP}"
 
 url=$(tar -tf _.tar.gz | head -n 1)
 tar --strip-components=2 -xf _.tar.gz ${url}client
 
-echo -e "$YELLOW Deleting temporary files...\033[0m"
+echo -e "$YELLOW Deleting temporary files...${COLOR_STOP}"
 
 rm _.tar.gz
 
-echo -e "$YELLOW Installing dependencies...\033[0m"
+echo -e "$YELLOW Installing dependencies...${COLOR_STOP}"
 
 npm install --silent
 
-echo -e "$YELLOW Creating config file...\033[0m"
+echo -e "$YELLOW Creating config file...${COLOR_STOP}"
 mv config.example.json config.json
 # node start --no-start
 
 echo ""
-echo -e "$GREEN Mina Monitor Client successfully installed...\033[0m"
-echo "Before start, you must define a nodes in the config.json."
-echo "When you complete a node setups, you can launch client with a command npm start"
+echo -e "$GREEN Mina Monitor Client successfully installed...${COLOR_STOP}"
+echo -e "Before start, you must define a node in the ${YELLOW}config.json${COLOR_STOP}."
+echo -e "When you complete a config setup, you can launch client with a command ${YELLOW}npm start ${COLOR_STOP}"
 echo ""
 
