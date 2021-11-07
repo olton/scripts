@@ -8,12 +8,16 @@ echo -e "$GREEN Copyright 2021 by Serhii Pimenov <serhii@pimenov.com.ua>\033[0m"
 
 TARGET="mina-monitor-server"
 BRANCH="master"
+SERVICE_TARGET_SYSTEM = "/etc/systemd/system/"
+SERVICE_TARGET_USER = "/usr/lib/systemd/user"
+SERVICE_TARGET = "user"
 
 while getopts ":t:b:" opt
 do
   case $opt in
     t) TARGET=$OPTARG;;
     b) BRANCH=$OPTARG;;
+    s) SERVICE_TARGET=$OPTARG;;
   esac
 done
 
@@ -40,14 +44,24 @@ echo -e "$YELLOW Deleting temporary files...\033[0m"
 rm _.tar.gz
 
 echo -e "$YELLOW Installing dependencies...\033[0m"
-
 npm install
 
 echo -e "$YELLOW Creating config file...\033[0m"
-
 node index --init
 
+echo -e "$YELLOW Install Monitor as service...\033[0m"
+sed -i "s/\/home\/user\//\/${HOME}\//g" 'minamon.service'
+sed -i "s/mina-monitor/${TARGET}/g" 'minamon.service'
+
+if ["$SERVICE_TARGET" == 'user']; then
+  cp "minamon.serivce" "$SERVICE_TARGET_USER"
+else
+  cp "minamon.serivce" "$SERVICE_TARGET_SYSTEM"
+fi
+
+echo -e "$GREEN Mina Monitor Server Service successfully installed.\033[0m"
+
 echo ""
-echo -e "$GREEN Mina Monitor Server successfully installed...\033[0m"
+echo -e "$GREEN Mina Monitor Server successfully installed.\033[0m"
 echo ""
 
