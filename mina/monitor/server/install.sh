@@ -66,10 +66,12 @@ if npm install --silent; then
   echo -e "$GREEN Dependencies installed successfully!${COLOR_STOP}"
 fi
 
-echo ""
-echo -e "$YELLOW Creating config file...${COLOR_STOP}"
-if node index --init &>/dev/null; then
-  echo -e "$GREEN Config file created successfully!${COLOR_STOP}"
+CONFIG_FILE=config.json
+if ! [ -f "$CONFIG_FILE" ]; then
+  echo -e "$YELLOW Creating config file...${COLOR_STOP}"
+  if node index --init &>/dev/null; then
+    echo -e "$GREEN Config file created successfully!${COLOR_STOP}"
+  fi
 fi
 
 sed -i "s#/home/user/#$HOME/#g" "$SERVICE_FILE"

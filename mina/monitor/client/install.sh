@@ -62,9 +62,12 @@ echo -e "$YELLOW Installing dependencies...${COLOR_STOP}"
 
 npm install --silent
 
-echo -e "$YELLOW Creating config file...${COLOR_STOP}"
-mv config.example.json config.json
-# node start --no-start
+CONFIG_FILE=config.json
+if ! [ -f "$CONFIG_FILE" ]; then
+  echo -e "$YELLOW Creating config file...${COLOR_STOP}"
+  mv config.example.json config.json
+  # node start --no-start // TODO
+fi
 
 echo ""
 echo -e "$GREEN Mina Monitor Client successfully installed...${COLOR_STOP}"
