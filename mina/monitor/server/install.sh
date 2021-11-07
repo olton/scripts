@@ -10,7 +10,7 @@ TARGET="mina-monitor-server"
 BRANCH="master"
 SERVICE_TARGET_SYSTEM = "/etc/systemd/system/"
 SERVICE_TARGET_USER = "/usr/lib/systemd/user"
-SERVICE_TARGET = "user"
+SERVICE_TARGET = "system"
 
 while getopts ":t:b:" opt
 do
@@ -53,10 +53,10 @@ echo -e "$YELLOW Install Monitor as service...\033[0m"
 sed -i "s/\/home\/user\//\/${HOME}\//g" 'minamon.service'
 sed -i "s/mina-monitor/${TARGET}/g" 'minamon.service'
 
-if ["$SERVICE_TARGET" == 'user']; then
-  cp "minamon.serivce" "$SERVICE_TARGET_USER"
-else
+if ["$SERVICE_TARGET" == 'system']; then
   cp "minamon.serivce" "$SERVICE_TARGET_SYSTEM"
+else
+  cp "minamon.serivce" "$SERVICE_TARGET_USER"
 fi
 
 echo -e "$GREEN Mina Monitor Server Service successfully installed.\033[0m"
