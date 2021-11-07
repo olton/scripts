@@ -4,10 +4,28 @@ clear
 
 YELLOW="\033[33m"
 GREEN="\033[32m"
+RED="\033[31m"
 
 echo -e "$GREEN Welcome to Mina Monitor Server installer!\033[0m"
 echo -e "$GREEN Copyright 2021 by Serhii Pimenov <serhii@pimenov.com.ua>\033[0m"
 read -p " If you are ready, press [Enter] key to start or Ctrl+C to stop..."
+
+echo -ne "$YELLOW Check NodeJS:\033[0m"
+
+if ! which node > /dev/null; then
+  echo -e "$RED Error! NodeJS not installed! Please install NodeJS v14+ and try again.\033[0m"
+  exit
+fi
+
+IFS="."
+read -a NODE_VERSION <<< $(node -v | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
+
+if ! [ $NODE_VERSION[0] > 13 ]; then
+  echo -e "$RED Error! NodeJS version is not a valid! You must use version NodeJS >= 14.\033[0m"
+  exit
+fi
+
+echo -e "$GREEN...OK... \033[0m"
 
 TARGET="mina-monitor-server"
 BRANCH="master"
@@ -45,12 +63,14 @@ tar --strip-components=2 -xf _.tar.gz ${url}server
 
 echo ""
 echo -e "$YELLOW Installing dependencies...\033[0m"
-npm install
+if npm install --silent; then
+  echo -e "$GREEN Dependencies installed successfully!\033[0m"
+fi
 
 echo ""
 echo -e "$YELLOW Creating config file...\033[0m"
 if node index --init &>/dev/null; then
-  echo -e "$GREEN Config file was created successfully\033[0m"
+  echo -e "$GREEN Config file created successfully!\033[0m"
 fi
 
 sed -i "s#/home/user/#$HOME/#g" "$SERVICE_FILE"

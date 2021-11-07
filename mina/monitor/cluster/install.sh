@@ -2,9 +2,28 @@
 
 YELLOW="\033[33m"
 GREEN="\033[32m"
+RED="\033[31m"
 
 echo -e "$GREEN Welcome to Mina Monitor Cluster installer!\033[0m"
 echo -e "$GREEN Copyright 2021 by Serhii Pimenov <serhii@pimenov.com.ua>\033[0m"
+read -p " If you are ready, press [Enter] key to start or Ctrl+C to stop..."
+
+echo -ne "$YELLOW Check NodeJS:\033[0m"
+
+if ! which node > /dev/null; then
+  echo -e "$RED Error! NodeJS not installed! Please install NodeJS v14+ and try again.\033[0m"
+  exit
+fi
+
+IFS="."
+read -a NODE_VERSION <<< $(node -v | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
+
+if ! [ $NODE_VERSION[0] > 13 ]; then
+  echo -e "$RED Error! NodeJS version is not a valid! You must use version NodeJS >= 14.\033[0m"
+  exit
+fi
+
+echo -e "$GREEN...OK... \033[0m"
 
 TARGET="mina-monitor-cluster"
 BRANCH="master"
