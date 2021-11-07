@@ -50,8 +50,8 @@ echo -e "$YELLOW Creating config file...\033[0m"
 node index --init
 
 echo -e "$YELLOW Install Monitor as service...\033[0m"
-sed -i "s/\/home\/user\//\/${HOME}\//g" 'minamon.service'
-sed -i "s/mina-monitor/${TARGET}/g" 'minamon.service'
+sed -i "s/\/home\/user\//$HOME/g" 'minamon.service'
+sed -i "s/mina-monitor/$TARGET/g" 'minamon.service'
 
 if ["$SERVICE_TARGET" == 'system']; then
   cp "minamon.serivce" "$SERVICE_TARGET_SYSTEM"
