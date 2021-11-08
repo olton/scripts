@@ -32,7 +32,7 @@ curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/clie
 
 #### Options
 
-By default, the script takes files from branch `master` and saves these into folder `mina-monitor-client` in the user `HOME` catalog.
+By default, the script takes files from branch `master` and saves these into folder `mina-monitor-client`.
 You can set a branch or tag where the script will take files and where these files will be saved.
 To  set branch use parameter `-b branchName`, to set target - use parameter `-t targetFolderName`
 

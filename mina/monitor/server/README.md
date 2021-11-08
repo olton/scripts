@@ -2,14 +2,19 @@
 
 The script is designed to quickly install Mina Monitor Server
 
-### Using
+## Using
+
+### Linux
+
+>You must have Bash
+
 ```shell
 curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/server/install.sh | bash
 ```
 
 ### Options
 
-By default, the script takes files from branch `master` and saves these into folder `~/mina-monitor-server`.
+By default, the script takes files from branch `master` and saves these into folder `mina-monitor-server`.
 You can set a branch or tag where the script will take files and where these files will be saved.
 To  set branch use parameters:
 - `-b branchName` - get source from specified branch
@@ -19,5 +24,3 @@ To  set branch use parameters:
 ```shell
 curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/server/install.sh | bash -s -- -b branchName -t targetFolderName
 ```
-
-> If you need to set a target folder, you must define a branch.
