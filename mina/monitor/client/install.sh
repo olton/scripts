@@ -41,7 +41,7 @@ echo -e "$GREEN We are installing Mina Monitor Client from branch $BRANCH into ~
 echo -e "$YELLOW Installing Mina Monitor Client...${COLOR_STOP}"
 echo -e "$YELLOW Creating a target directory...${COLOR_STOP}"
 
-cd
+#cd ~
 mkdir -p ${TARGET}
 cd ${TARGET}
 

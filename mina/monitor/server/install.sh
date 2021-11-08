@@ -47,7 +47,7 @@ echo -e "$YELLOW Installing Mina Monitor Server...${COLOR_STOP}"
 
 echo -e "$YELLOW Creating a target directory...${COLOR_STOP}"
 
-cd ~
+#cd ~
 mkdir -p ${TARGET}
 cd ${TARGET}
 
