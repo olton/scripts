@@ -148,7 +148,7 @@ install_pre_requirements() {
 #  sudo apt-get -y upgrade -qq
   sudo apt --fix-broken install
   sudo apt-get -qq install -y apt-transport-https ca-certificates gnupg
-  sudo apt-get -qq install -y curl unzip
+  sudo apt-get -qq install -y curl unzip mc htop net-tools
 
   OLD_IFS=IFS
   IFS="."
