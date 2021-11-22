@@ -8,7 +8,7 @@ trap cleanup SIGINT SIGTERM ERR EXIT
 SCRIPT_NAME="install.sh"
 
 # Default values
-INSTALL_UFW=true
+INSTALL_UFW=false
 NODE_VERSION=0
 MINA_USER=umina
 MINA_USER_PASS=""
@@ -192,7 +192,7 @@ create_user() {
     usermod -aG sudo $MINA_USER
 #    usermod -aG system-journal $MINA_USER
 
-    if $MINA_USER_PASS; then
+    if [ -Z "$MINA_USER_PASS" ]; then
       msg "$CYAN Set user password...$NOFORMAT"
       echo $MINA_USER_PASS | passwd $MINA_USER --stdin
     fi
