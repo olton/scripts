@@ -9,6 +9,7 @@ SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
 
 # Default values
 INSTALL_UFW=false
+INSTALL_MONITOR=false
 NODE_VERSION=0
 MINA_USER=umina
 MINA_USER_PASS=""
@@ -172,7 +173,6 @@ install_ufw() {
   fi
 }
 
-
 install_nodejs() {
   msg "$CYAN Installing NodeJS...$NOFORMAT"
   if [[ "$NODE_VERSION" -ne "0" ]]; then
@@ -187,6 +187,13 @@ install_nodejs() {
         sudo apt-get -qq install -y nodejs
     fi
   fi
+}
+
+install_monitor() {
+	if $INSTALL_MONITOR; then
+		MONITOR_TARGET_FOLDER=/home/${MINA_USER}/mina-monitor-server
+		curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/server/install.sh | bash -s -- -t $MONITOR_TARGET_FOLDER
+	fi
 }
 
 create_user() {
@@ -279,6 +286,7 @@ install_nodejs
 create_user
 install_mina
 install_mina_env
+install_monitor
 
 cleanup
 # End of script
