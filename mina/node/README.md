@@ -19,7 +19,7 @@ chmod 755 ./install-mina.sh
 ```
 
 ### Usage:
-```shell
+```
 install.sh [OPTIONS]...
 
 This script is intended to simple install a Mina node.
