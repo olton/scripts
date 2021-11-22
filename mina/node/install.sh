@@ -222,8 +222,6 @@ create_user() {
 		chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/.ssh/authorized_keys
 		chmod 600 /home/${MINA_USER}/.ssh/authorized_keys
   fi
-
-  msg "$CYAN User was created successful.$NOFORMAT"
 }
 
 install_mina() {
@@ -245,8 +243,6 @@ install_mina() {
   su - -c "systemctl --user enable mina" $MINA_USER
 
   sudo loginctl enable-linger $MINA_USER
-
-  msg "$CYAN Mina was installed successful.$NOFORMAT"
 }
 
 install_mina_env(){
