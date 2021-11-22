@@ -1,6 +1,14 @@
 # Install the Mina node
 
-The script is designed to quickly install the Mina node.
+The script is designed to quickly install the Mina node on Ubuntu 18.x, 20.x, ...
+This script will install:
+- [x] UFW
+- [x] NodeJS
+- [x] Mina Monitor
+- [x] Mina
+- [x] Mina environment
+- [x] Required folders and files
+- [x] Mina Service
 
 > Now in develop...
 
