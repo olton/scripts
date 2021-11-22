@@ -224,7 +224,7 @@ create_user() {
 
     if [[ ! -z "$MINA_USER_PASS" ]]; then
       msg "$CYAN Set user password...$NOFORMAT"
-      echo "${MINA_USER_PASS}\n${MINA_USER_PASS}" | passwd $MINA_USER
+      echo -e "${MINA_USER_PASS}\n${MINA_USER_PASS}" | passwd $MINA_USER
     fi
   fi
 
