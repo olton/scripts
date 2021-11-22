@@ -31,6 +31,7 @@ usage() {
 		--ufw           Install UFW (Uncomplicated Firewall), default false. Use true to enable this action.
 		--node          Install NodeJS
 		--net           Use mainnet or devnet values to set net type, default mainnet
+		--mina-version  Set the Mina version to be installed, default 1.2.0-fe51f1e
 		--key           Directory for the Mina keys
 		--key-pass      Password for Mina Private key
 		--user          Define a user name for Mina owner, default umina
@@ -85,6 +86,10 @@ parse_params() {
       ;;
     --net)
       NET_TARGET="${2-}"
+      shift
+      ;;
+    --mina-version)
+      MINA_VERSION="${2-}"
       shift
       ;;
     --key)
