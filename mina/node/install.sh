@@ -10,7 +10,7 @@ SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
 INSTALL_UFW=false
 INSTALL_MONITOR=false
 INSTALL_ARC=false
-NODE_VERSION=0
+NODE_VERSION=16
 MINA_USER=umina
 MINA_USER_PASS=""
 MINA_VERSION="1.2.2-feee67c"
@@ -19,6 +19,7 @@ MINA_KEY_PASS=""
 NET_TARGET=mainnet
 SSH_PORT=22
 MONITOR_PORT=8000
+MONITOR_FOLDER="mina-monitor-server"
 
 usage() {
 	cat <<- EOF
@@ -33,15 +34,16 @@ usage() {
 		--ufw                  Install UFW (Uncomplicated Firewall), default false. Use this flag to enable this action.
 		--monitor              Install Mina Monitor, use this flag to enable action
 		--archive              Install Mina Archive Node, use this flag to enable action
-		--node                 Install NodeJS. Example: --node 16.
+		--node                 Install NodeJS. Default will be installed 16.x LTS. Example: --node 16.
 		--net                  Use mainnet or devnet values to set net type, default mainnet. Example: --net devnet.
 		--mina-version         Set Mina version to be installed, default 1.2.0-fe51f1e. Example: --mina-version 1.2.0-fe51f1e
 		--key-folder, --key    Set directory for the Mina keys. Default value is "keys". Example: --key mina_keys
 		--key-pass             Set password for Mina Private key
 		--user                 Define a user name for Mina owner, default "umina"
 		--user-pass            Define a Mina user password
-		--ssh-port             Define a ssh port, default 22
-		--monitor-port         Define a ssh port, default 8000
+		--ssh-port             Define a ssh port, which will be opened in UFW, default 22
+		--monitor-port         Define a Mina Monitor port, which will be opened in UFW, default 8000
+		--monitor-folder       Define a folder, where Mina Monitor will be installed, default mina-monitor-server
 
 		For example:
 		${SCRIPT_NAME} --help
@@ -121,6 +123,10 @@ parse_params() {
       MONITOR_PORT="${2-}"
       shift
       ;;
+    --monitor-folder)
+      MONITOR_FOLDER="${2-}"
+      shift
+      ;;
     -?*) die "Unknown option: $1" ;;
     *) break ;;
     esac
@@ -144,11 +150,12 @@ welcome() {
 
 install_pre_requirements() {
   msg "$CYAN Preparing OS...$NOFORMAT"
-  sudo apt-get -y update -qq
-#  sudo apt-get -y upgrade -qq
-  sudo apt --fix-broken install
-  sudo apt-get -qq install -y apt-transport-https ca-certificates gnupg
-  sudo apt-get -qq install -y curl unzip mc htop net-tools
+  sudo apt-get -y update &>/dev/null
+  sudo apt --fix-broken install &>/dev/null
+  msg "$CYAN Installing HTTPS support...$NOFORMAT"
+  sudo apt-get -y install apt-transport-https ca-certificates gnupg  &>/dev/null
+  msg "$CYAN Installing utils...$NOFORMAT"
+  sudo apt-get -y install curl unzip mc htop net-tools &>/dev/null
 
   OLD_IFS=IFS
   IFS="."
@@ -172,7 +179,7 @@ install_ufw() {
   msg "$CYAN Installing UFW...$NOFORMAT"
   if $INSTALL_UFW; then
     if ! which node > /dev/null; then
-      sudo apt-get -y install ufw
+      sudo apt-get -y install ufw &>/dev/null
     fi
 
 		sudo ufw default deny incoming
@@ -197,8 +204,8 @@ install_nodejs() {
 			DISTRO="$(lsb_release -s -c)"
 			echo "deb https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 			echo "deb-src https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
-			sudo apt-get -y update -qq
-			sudo apt-get -qq install -y nodejs
+			sudo apt-get -y update &>/dev/null
+			sudo apt-get -y install nodejs &>/dev/null
     fi
   fi
 }
@@ -206,7 +213,7 @@ install_nodejs() {
 install_monitor() {
 	if $INSTALL_MONITOR; then
     msg "$CYAN Installing Mina Monitor...$NOFORMAT"
-		MONITOR_TARGET_FOLDER=/home/${MINA_USER}/mina-monitor-server
+		MONITOR_TARGET_FOLDER=/home/${MINA_USER}/${MONITOR_FOLDER}
 		curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/server/install.sh | bash -s -- -t $MONITOR_TARGET_FOLDER
 	fi
 }
@@ -243,13 +250,13 @@ install_mina() {
   msg "$YELLOW We will install Mina $NOFORMAT ${mina_package}"
 
   echo "deb [trusted=yes] http://packages.o1test.net stretch stable" | sudo tee /etc/apt/sources.list.d/mina.list
-  sudo apt-get -y update -qq
-  sudo apt-get -qq -y --allow-downgrades install $mina_package
+  sudo apt-get -y update &>/dev/null
+  sudo apt-get -y --allow-downgrades install $mina_package &>/dev/null
 
 	if $INSTALL_ARC; then
 		mina_archive_package="mina-archive=${MINA_VERSION}"
 		msg "$YELLOW We will install Mina Archive $NOFORMAT ${mina_archive_package}"
-		sudo apt-get -qq -y --allow-downgrades install $mina_archive_package
+		sudo apt-get -y --allow-downgrades install $mina_archive_package &>/dev/null
 	fi
 
   OLD_IFS=IFS; IFS=" "; read -a mina_version <<< "$(mina version)"; IFS=OLD_IFS
@@ -287,7 +294,7 @@ install_mina_env(){
 	    sed -i "s/your_password/${MINA_KEYS_PASS}/g" $mina_env_file
 	fi
 
-  msg "$GREEN The Mina environment created successful!$NOFORMAT"
+  msg "$GREEN Setup complete!$NOFORMAT"
   msg "$YELLOW Now, you must set the password in file .mina-env for your keys if you not defined it with command argument --key-pass.$NOFORMAT"
   msg "$YELLOW Then, run command below to start Mina Node and init others requirements and stop it with Ctrl+C after successful runs:$NOFORMAT"
   msg " mina daemon --peer-list-url https://storage.googleapis.com/mina-seed-lists/mainnet_seeds.txt"
