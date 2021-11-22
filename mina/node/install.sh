@@ -7,12 +7,13 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
 
 # Default values
-INSTALL_UFW=false
+INSTALL_UFW=true
 NODE_VERSION=0
 MINA_USER=umina
 MINA_USER_PASS=""
 MINA_VERSION=1.2.0-fe51f1e
-MINA_KEYS=keys
+MINA_KEY=keys
+MINA_KEY_PASS=""
 NET_TARGET=mainnet
 
 usage() {
@@ -25,12 +26,14 @@ usage() {
 
 		-h, --help      Print this help and exit
 		--no-color      Disable color output
-		--ufw           Install UFW (Uncomplicated Firewall)
+		--ufw           Install UFW (Uncomplicated Firewall), default true.
+										Use false to disable this action.
 		--node          Install NodeJS
-		--net           Use mainnet or devnet, default mainnet
-		--keys          Directory for the Mina keys
+		--net           Use mainnet or devnet values to set net type, default mainnet
+		--key           Directory for the Mina keys
+		--key-pass      Password for Mina Private key
 		--user          Define a user name for Mina owner, default umina
-		--pass          Define a Mina user password
+		--user-pass     Define a Mina user password
 
 	EOF
   exit
@@ -74,7 +77,7 @@ parse_params() {
       MINA_USER="${2-}"
       shift
       ;;
-    --pass)
+    --user-pass)
       MINA_USER_PASS="${2-}"
       shift
       ;;
@@ -82,8 +85,12 @@ parse_params() {
       NET_TARGET="${2-}"
       shift
       ;;
-    --keys)
-      MINA_KEYS="${2-}"
+    --key)
+      MINA_KEY="${2-}"
+      shift
+      ;;
+    --key_pass)
+      MINA_KEYS_PASS="${2-}"
       shift
       ;;
 #    -f | --flag) flag=1 ;; # example flag
@@ -212,24 +219,24 @@ install_mina() {
 install_mina_env(){
   msg "$CYAN Create Mina environment!$NOFORMAT"
 
-  mkdir -p /home/${MINA_USER}/$MINA_KEYS
-  chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/${MINA_KEYS}
-  chmod 700 /home/${MINA_USER}/${MINA_KEYS}
+  mkdir -p /home/${MINA_USER}/$MINA_KEY
+  chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/${MINA_KEY}
+  chmod 700 /home/${MINA_USER}/${MINA_KEY}
   touch /home/${MINA_USER}/.mina-env
   chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/.mina-env
 
   mina_env_file="/home/${MINA_USER}/.mina-env"
 
   cat <<- EOF > $mina_env_file
-		UPTIME_PRIVKEY_PASS="...your_password..."
-		CODA_PRIVKEY_PASS="...your_password..."
+		UPTIME_PRIVKEY_PASS="your_password"
+		CODA_PRIVKEY_PASS="your_password"
 		LOG_LEVEL=Info
 		FILE_LOG_LEVEL=Debug
-		EXTRA_FLAGS=" --block-producer-key /home/${MINA_USER}/${MINA_KEYS}/my-wallet --uptime-submitter-key /home/${MINA_USER}/${MINA_KEYS}/my-wallet --uptime-url http://34.134.227.208/v1/submit --limited-graphql-port 3095 "
+		EXTRA_FLAGS=" --block-producer-key /home/${MINA_USER}/${MINA_KEY}/my-wallet --uptime-submitter-key /home/${MINA_USER}/${MINA_KEY}/my-wallet --uptime-url http://34.134.227.208/v1/submit --limited-graphql-port 3095 "
 	EOF
 
   msg "$GREEN The Mina environment created successful!$NOFORMAT"
-  msg "$YELLOW Now, you must set the password in file .mina-env for your keys.$NOFORMAT"
+  msg "$YELLOW Now, you must set the password in file .mina-env for your keys if you not defined it with command argument --key-pass.$NOFORMAT"
   msg "$YELLOW Then, run command below to start Mina Node and init others requirements and stop it with Ctrl+C after successful runs:$NOFORMAT"
   msg "$PURPLE mina daemon --peer-list-url https://storage.googleapis.com/mina-seed-lists/mainnet_seeds.txt $NOFORMAT"
   msg "$YELLOW After, you will stop standalone process, you can run service with a command below:$NOFORMAT"
