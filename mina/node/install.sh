@@ -284,7 +284,7 @@ install_mina_env(){
 	EOF
 
 	if [[ ! -z "$MINA_KEY_PASS" ]]; then
-	    sed -i 's/your_password/${MINA_KEYS_PASS}/g' $mina_env_file
+	    sed -i "s/your_password/${MINA_KEYS_PASS}/g" $mina_env_file
 	fi
 
   msg "$GREEN The Mina environment created successful!$NOFORMAT"
