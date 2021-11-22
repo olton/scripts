@@ -131,8 +131,8 @@ install_pre_requirements() {
   sudo apt-get -y update -qq
   sudo apt-get -y upgrade -qq
   sudo apt --fix-broken install
-  sudo apt-get install -y apt-transport-https ca-certificates gnupg
-  sudo apt-get install -y curl htop mc net-tools unzip
+  sudo apt-get -qq install -y apt-transport-https ca-certificates gnupg
+  sudo apt-get -qq install -y curl htop mc net-tools unzip
 
   IFS="."
   read -a OS_VERSION <<< $(lsb_release -d | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
