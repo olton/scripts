@@ -265,16 +265,16 @@ install_mina_env(){
 		EXTRA_FLAGS=" --block-producer-key /home/${MINA_USER}/${MINA_KEY}/my-wallet --uptime-submitter-key /home/${MINA_USER}/${MINA_KEY}/my-wallet --uptime-url http://34.134.227.208/v1/submit --limited-graphql-port 3095 "
 	EOF
 
-	if $MINA_KEY_PASS; then
+	if [[ ! -z $MINA_KEY_PASS ]]; then
 	    sed -i 's/your_password/${MINA_KEYS_PASS}/g' $mina_env_file
 	fi
 
   msg "$GREEN The Mina environment created successful!$NOFORMAT"
   msg "$YELLOW Now, you must set the password in file .mina-env for your keys if you not defined it with command argument --key-pass.$NOFORMAT"
   msg "$YELLOW Then, run command below to start Mina Node and init others requirements and stop it with Ctrl+C after successful runs:$NOFORMAT"
-  msg "$PURPLE mina daemon --peer-list-url https://storage.googleapis.com/mina-seed-lists/mainnet_seeds.txt $NOFORMAT"
+  msg " mina daemon --peer-list-url https://storage.googleapis.com/mina-seed-lists/mainnet_seeds.txt"
   msg "$YELLOW After, you will stop standalone process, you can run service with a command below:$NOFORMAT"
-  msg "$PURPLE systemctl --user start mina $NOFORMAT"
+  msg " systemctl --user start mina"
 }
 
 parse_params "$@"
@@ -285,9 +285,9 @@ install_pre_requirements
 install_ufw
 install_nodejs
 create_user
+install_monitor
 install_mina
 install_mina_env
-install_monitor
 
 cleanup
 # End of script
