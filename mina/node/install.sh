@@ -227,13 +227,13 @@ create_user() {
 install_mina() {
   msg "$CYAN Installing Mina...$NOFORMAT"
 
-	mina="mina-${NET_TARGET}=${MINA_VERSION}"
+	mina_package="mina-${NET_TARGET}=${MINA_VERSION}"
 
-  msg "$YELLOW We will install Mina $NOFORMAT ${mina}"
+  msg "$YELLOW We will install Mina $NOFORMAT ${mina_package}"
 
   echo "deb [trusted=yes] http://packages.o1test.net stretch stable" | sudo tee /etc/apt/sources.list.d/mina.list
   sudo apt-get -y update -qq
-  sudo apt-get -qq install -y $mina
+  sudo apt-get -y install $mina_package
 
   installed_mina_version=($("mina version"))
 
