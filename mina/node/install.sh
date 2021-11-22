@@ -150,7 +150,7 @@ welcome() {
 install_pre_requirements() {
   msg "$CYAN Preparing OS...$NOFORMAT"
   sudo apt-get -y update -qq
-  sudo apt-get -y upgrade -qq
+#  sudo apt-get -y upgrade -qq
   sudo apt --fix-broken install
   sudo apt-get -qq install -y apt-transport-https ca-certificates gnupg
   sudo apt-get -qq install -y curl unzip
