@@ -135,7 +135,7 @@ install_pre_requirements() {
   sudo apt-get install -y curl htop mc net-tools unzip
 
   IFS="."
-  read -a OS_VERSION <<< $(lbs_release -d | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
+  read -a OS_VERSION <<< $(lsb_release -d | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
   if [ $OS_VERSION[0] -gt 18 ]; then
 	  msg "$CYAN Installing required libs...$NOFORMAT"
     cd
