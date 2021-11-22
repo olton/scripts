@@ -190,7 +190,6 @@ create_user() {
     msg "$CYAN Adding user...$NOFORMAT"
     adduser --disabled-password --gecos "" $MINA_USER
     usermod -aG sudo $MINA_USER
-#    usermod -aG system-journal $MINA_USER
 
     if [ -Z "$MINA_USER_PASS" ]; then
       msg "$CYAN Set user password...$NOFORMAT"
