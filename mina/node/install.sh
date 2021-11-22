@@ -142,7 +142,7 @@ install_pre_requirements() {
 
   IFS="."
   read -a OS_VERSION <<< $(lsb_release -d | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
-  if [ $OS_VERSION[0] -gt 18 ]; then
+  if  (( $OS_VERSION > 18 )); then
 	  msg "$CYAN Installing required libs...$NOFORMAT"
     cd
     mkdir -p mina_required_libs
