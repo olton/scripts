@@ -121,11 +121,6 @@ parse_params() {
       MONITOR_PORT="${2-}"
       shift
       ;;
-#    -f | --flag) flag=1 ;; # example flag
-#    -p | --param) # example named parameter
-#      param="${2-}"
-#      shift
-#      ;;
     -?*) die "Unknown option: $1" ;;
     *) break ;;
     esac
@@ -134,7 +129,7 @@ parse_params() {
 
   args=("$@")
 
-  # check required params and arguments
+#  check required params and arguments
 #  [[ -z "${param-}" ]] && die "Missing required parameter: param"
 #  [[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
 
@@ -196,14 +191,14 @@ install_nodejs() {
   msg "$CYAN Installing NodeJS...$NOFORMAT"
   if [[ "$NODE_VERSION" -ne "0" ]]; then
     if ! which node > /dev/null; then
-        #install node & npm - see https://github.com/nodesource/distributions#deb
-        curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
-        VERSION=("node_${NODE_VERSION}.x")
-        DISTRO="$(lsb_release -s -c)"
-        echo "deb https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-        echo "deb-src https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
-			  sudo apt-get -y update -qq
-        sudo apt-get -qq install -y nodejs
+			#install node & npm - see https://github.com/nodesource/distributions#deb
+			curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
+			VERSION=("node_${NODE_VERSION}.x")
+			DISTRO="$(lsb_release -s -c)"
+			echo "deb https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+			echo "deb-src https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+			sudo apt-get -y update -qq
+			sudo apt-get -qq install -y nodejs
     fi
   fi
 }
