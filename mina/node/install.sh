@@ -257,8 +257,8 @@ install_mina() {
   msg "$GREEN We installed Mina version ${mina_version[1]}.$NOFORMAT"
 
   msg "$CYAN Installing Mina Service...$NOFORMAT"
-  su -c "systemctl --user daemon-reload" $MINA_USER
-  su -c "systemctl --user enable mina" $MINA_USER
+  su - -c "systemctl --user daemon-reload" $MINA_USER
+  su - -c "systemctl --user enable mina" $MINA_USER
 
   msg "$CYAN Enabling linger for ${MINA_USER}...$NOFORMAT"
   sudo loginctl enable-linger $MINA_USER
