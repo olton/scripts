@@ -10,26 +10,29 @@ SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
 INSTALL_UFW=false
 NODE_VERSION=0
 MINA_USER=umina
+MINA_USER_PASS=""
 MINA_VERSION=1.2.0-fe51f1e
 MINA_KEYS=keys
 NET_TARGET=mainnet
 
 usage() {
-  cat <<EOF
-Usage: $SCRIPT_NAME [-h] [--no-color] [--ufw] [--node=xx] [--net=mainnet|devnet] [--keys=keys] [--user=umina]
+	cat <<- EOF
+		Usage: $SCRIPT_NAME [OPTIONS]...
 
-This script is intended to simple install a Mina node.
+		This script is intended to simple install a Mina node.
 
-Available options:
+		Available options:
 
--h, --help      Print this help and exit
---no-color      Disable color output
---ufw           Install UFW (Uncomplicated Firewall)
---node          Install NodeJS
---net           Use mainnet or devnet, default mainnet
---keys          Directory for the Mina keys
---user          Define a user name for Mina owner, default umina
-EOF
+		-h, --help      Print this help and exit
+		--no-color      Disable color output
+		--ufw           Install UFW (Uncomplicated Firewall)
+		--node          Install NodeJS
+		--net           Use mainnet or devnet, default mainnet
+		--keys          Directory for the Mina keys
+		--user          Define a user name for Mina owner, default umina
+		--pass          Define a Mina user password
+
+	EOF
   exit
 }
 
@@ -69,6 +72,10 @@ parse_params() {
       ;;
     --user)
       MINA_USER="${2-}"
+      shift
+      ;;
+    --pass)
+      MINA_USER_PASS="${2-}"
       shift
       ;;
     --net)
@@ -162,14 +169,21 @@ install_ufw() {
 create_user() {
   msg "$CYAN Create user for Mina...$NOFORMAT"
   if ! id $MINA_USER &>/dev/null; then
+    msg "$CYAN Adding user...$NOFORMAT"
     adduser --disabled-password --gecos "" $MINA_USER
     usermod -aG sudo,system-journal $MINA_USER
+
+    if $MINA_USER_PASS; then
+      msg "$CYAN Set user password...$NOFORMAT"
+      echo $MINA_USER_PASS | passwd $MINA_USER --stdin
+    fi
   fi
 
-  su - -c "mkdir -p /home/${MINA_USER}/.ssh" $MINA_USER
-  su - -c "sudo cp /root/.ssh/authorized_keys /home/${MINA_USER}/.ssh/authorized_keys" $MINA_USER
-  su - -c "sudo chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/.ssh/authorized_keys" $MINA_USER
-  su - -c "chmod 600 /home/${MINA_USER}/.ssh/authorized_keys" $MINA_USER
+  mkdir -p /home/${MINA_USER}/.ssh
+  chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/.ssh
+  cp /root/.ssh/authorized_keys /home/${MINA_USER}/.ssh/authorized_keys
+  chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/.ssh/authorized_keys
+  chmod 600 /home/${MINA_USER}/.ssh/authorized_keys
 
   sudo systemctl restart sshd
 
@@ -198,19 +212,21 @@ install_mina() {
 install_mina_env(){
   msg "$CYAN Create Mina environment!$NOFORMAT"
 
-  su - -c "mkdir -p /home/${MINA_USER}/$MINA_KEYS" $MINA_USER
-  su - -c "chmod 700 /home/${MINA_USER}/${MINA_KEYS}" $MINA_USER
-  su - -c "touch /home/${MINA_USER}/.mina-env" $MINA_USER
+  mkdir -p /home/${MINA_USER}/$MINA_KEYS
+  chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/${MINA_KEYS}
+  chmod 700 /home/${MINA_USER}/${MINA_KEYS}
+  touch /home/${MINA_USER}/.mina-env
+  chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/.mina-env
 
   mina_env_file="/home/${MINA_USER}/.mina-env"
 
-  cat <<- EOF >$mina_env_file
-    UPTIME_PRIVKEY_PASS="...your_password..."
-    CODA_PRIVKEY_PASS="...your_password..."
-    LOG_LEVEL=Info
-    FILE_LOG_LEVEL=Debug
-    EXTRA_FLAGS=" --block-producer-key /home/${MINA_USER}/${MINA_KEYS}/my-wallet --uptime-submitter-key /home/${MINA_USER}/${MINA_KEYS}/my-wallet --uptime-url http://34.134.227.208/v1/submit --limited-graphql-port 3095 "
-  EOF
+  cat <<- EOF > $mina_env_file
+		UPTIME_PRIVKEY_PASS="...your_password..."
+		CODA_PRIVKEY_PASS="...your_password..."
+		LOG_LEVEL=Info
+		FILE_LOG_LEVEL=Debug
+		EXTRA_FLAGS=" --block-producer-key /home/${MINA_USER}/${MINA_KEYS}/my-wallet --uptime-submitter-key /home/${MINA_USER}/${MINA_KEYS}/my-wallet --uptime-url http://34.134.227.208/v1/submit --limited-graphql-port 3095 "
+	EOF
 
   msg "$GREEN The Mina environment created successful!$NOFORMAT"
   msg "$YELLOW Now, you must set the password in file .mina-env for your keys.$NOFORMAT"
