@@ -267,9 +267,9 @@ install_mina() {
 install_mina_env(){
   msg "$CYAN Create Mina environment...$NOFORMAT"
 
-  mkdir -p /home/${MINA_USER}/$MINA_KEY
-  chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/${MINA_KEY}
-  chmod 700 /home/${MINA_USER}/${MINA_KEY}
+  mkdir -p /home/${MINA_USER}/$MINA_KEY_FOLDER
+  chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/${MINA_KEY_FOLDER}
+  chmod 700 /home/${MINA_USER}/${MINA_KEY_FOLDER}
   touch /home/${MINA_USER}/.mina-env
   chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/.mina-env
 
@@ -280,7 +280,7 @@ install_mina_env(){
 		CODA_PRIVKEY_PASS="your_password"
 		LOG_LEVEL=Info
 		FILE_LOG_LEVEL=Debug
-		EXTRA_FLAGS=" --block-producer-key /home/${MINA_USER}/${MINA_KEY}/my-wallet --uptime-submitter-key /home/${MINA_USER}/${MINA_KEY}/my-wallet --uptime-url http://34.134.227.208/v1/submit --limited-graphql-port 3095 "
+		EXTRA_FLAGS=" --block-producer-key /home/${MINA_USER}/${MINA_KEY_FOLDER}/my-wallet --uptime-submitter-key /home/${MINA_USER}/${MINA_KEY_FOLDER}/my-wallet --uptime-url http://34.134.227.208/v1/submit --limited-graphql-port 3095 "
 	EOF
 
 	if [[ ! -z "$MINA_KEY_PASS" ]]; then
