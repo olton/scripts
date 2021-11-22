@@ -14,10 +14,11 @@ NODE_VERSION=0
 MINA_USER=umina
 MINA_USER_PASS=""
 MINA_VERSION="1.2.2-feee67c"
-MINA_KEY=keys
+MINA_KEY_FOLDER=keys
 MINA_KEY_PASS=""
 NET_TARGET=mainnet
 SSH_PORT=22
+MONITOR_PORT=8000
 
 usage() {
 	cat <<- EOF
@@ -27,19 +28,26 @@ usage() {
 
 		Available options:
 
-		-h, --help      Print this help and exit
-		--no-color      Disable color output
-		--ufw           Install UFW (Uncomplicated Firewall), default false. Use true to enable this action.
-		--monitor       Install Mina Monitor
-		--archive       Install Mina Archive Node
-		--node          Install NodeJS
-		--net           Use mainnet or devnet values to set net type, default mainnet
-		--mina-version  Set the Mina version to be installed, default 1.2.0-fe51f1e
-		--key           Directory for the Mina keys
-		--key-pass      Password for Mina Private key
-		--user          Define a user name for Mina owner, default umina
-		--user-pass     Define a Mina user password
-		--ssh-port      Define a ssh port, default 22
+		-h, --help             Print this help and exit
+		--no-color             Disable color output
+		--ufw                  Install UFW (Uncomplicated Firewall), default false. Use this flag to enable this action.
+		--monitor              Install Mina Monitor, use this flag to enable action
+		--archive              Install Mina Archive Node, use this flag to enable action
+		--node                 Install NodeJS. Example: --node 16.
+		--net                  Use mainnet or devnet values to set net type, default mainnet. Example: --net devnet.
+		--mina-version         Set Mina version to be installed, default 1.2.0-fe51f1e. Example: --mina-version 1.2.0-fe51f1e
+		--key-folder, --key    Set directory for the Mina keys. Default value is "keys". Example: --key mina_keys
+		--key-pass             Set password for Mina Private key
+		--user                 Define a user name for Mina owner, default "umina"
+		--user-pass            Define a Mina user password
+		--ssh-port             Define a ssh port, default 22
+		--monitor-port         Define a ssh port, default 8000
+
+		For example:
+		${SCRIPT_NAME} --help
+
+		For example:
+		${SCRIPT_NAME} --node 16 --user umina --user-pass 123 --key-pass 777 --ufw --monitor --archive
 
 	EOF
   exit
@@ -97,8 +105,8 @@ parse_params() {
       MINA_VERSION="${2-}"
       shift
       ;;
-    --key)
-      MINA_KEY="${2-}"
+    --key | --key-folder)
+      MINA_KEY_FOLDER="${2-}"
       shift
       ;;
     --key-pass)
@@ -106,7 +114,11 @@ parse_params() {
       shift
       ;;
     --ssh-port)
-      MINA_KEYS_PASS="${2-}"
+      SSH_PORT="${2-}"
+      shift
+      ;;
+    --monitor-port)
+      MONITOR_PORT="${2-}"
       shift
       ;;
 #    -f | --flag) flag=1 ;; # example flag
@@ -154,7 +166,7 @@ install_pre_requirements() {
     wget http://mirrors.kernel.org/ubuntu/pool/main/libf/libffi/libffi6_3.2.1-8_amd64.deb
     wget http://mirrors.edge.kernel.org/ubuntu/pool/universe/j/jemalloc/libjemalloc1_3.6.0-11_amd64.deb
     wget http://mirrors.edge.kernel.org/ubuntu/pool/main/p/procps/libprocps6_3.3.12-3ubuntu1_amd64.deb
-    sudo dpkg -i *.deb
+    sudo dpkg -i *.deb &>/dev/null
     cd
     rm -rf mina_required_libs
   fi
@@ -171,7 +183,7 @@ install_ufw() {
       sudo ufw allow $SSH_PORT
       sudo ufw allow 8302/tcp
       sudo ufw allow 8303/tcp
-      sudo ufw allow 8000/tcp
+      sudo ufw allow $MONITOR_PORT
       sudo ufw disable
       sudo ufw enable
       sudo ufw status
@@ -274,7 +286,7 @@ install_mina_env(){
 		EXTRA_FLAGS=" --block-producer-key /home/${MINA_USER}/${MINA_KEY}/my-wallet --uptime-submitter-key /home/${MINA_USER}/${MINA_KEY}/my-wallet --uptime-url http://34.134.227.208/v1/submit --limited-graphql-port 3095 "
 	EOF
 
-	if [[ ! -z $MINA_KEY_PASS ]]; then
+	if [[ ! -z "$MINA_KEY_PASS" ]]; then
 	    sed -i 's/your_password/${MINA_KEYS_PASS}/g' $mina_env_file
 	fi
 
