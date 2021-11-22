@@ -9,6 +9,7 @@ SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
 # Default values
 INSTALL_UFW=false
 INSTALL_MONITOR=false
+INSTALL_ARC=false
 NODE_VERSION=0
 MINA_USER=umina
 MINA_USER_PASS=""
@@ -29,6 +30,8 @@ usage() {
 		-h, --help      Print this help and exit
 		--no-color      Disable color output
 		--ufw           Install UFW (Uncomplicated Firewall), default false. Use true to enable this action.
+		--monitor       Install Mina Monitor
+		--archive       Install Mina Archive Node
 		--node          Install NodeJS
 		--net           Use mainnet or devnet values to set net type, default mainnet
 		--mina-version  Set the Mina version to be installed, default 1.2.0-fe51f1e
@@ -73,6 +76,7 @@ parse_params() {
     --no-color) NO_COLOR=1 ;;
     --ufw) INSTALL_UFW=true ;;
     --monitor) INSTALL_MONITOR=true ;;
+    --archive) INSTALL_ARC=true ;;
     --node)
       NODE_VERSION="${2-}"
       shift
@@ -208,7 +212,7 @@ create_user() {
 
     if [[ ! -z "$MINA_USER_PASS" ]]; then
       msg "$CYAN Set user password...$NOFORMAT"
-      echo $MINA_USER_PASS | passwd $MINA_USER --stdin
+      echo "${MINA_USER_PASS}\n${MINA_USER_PASS}" | passwd $MINA_USER
     fi
   fi
 
@@ -234,6 +238,12 @@ install_mina() {
   sudo apt-get -y update -qq
   sudo apt-get -y --allow-downgrades install $mina_package
 
+	if $INSTALL_ARC; then
+		mina_archive_package="mina-archive=${MINA_VERSION}"
+		msg "$YELLOW We will install Mina Archive $NOFORMAT ${mina_archive_package}"
+		sudo apt-get -y --allow-downgrades install $mina_mina_archive_package
+	fi
+
   OLD_IFS=IFS; IFS=" "; read -a mina_version <<< "$(mina version)"; IFS=OLD_IFS
 
   msg "$GREEN We installed Mina version ${mina_version[1]}.$NOFORMAT"
@@ -242,6 +252,7 @@ install_mina() {
   su - -c "systemctl --user enable mina" $MINA_USER
 
   sudo loginctl enable-linger $MINA_USER
+
 }
 
 install_mina_env(){
