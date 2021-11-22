@@ -20,17 +20,13 @@ Available options:
 
 -h, --help             Print this help and exit
 --no-color             Disable color output
---ufw                  Install UFW (Uncomplicated Firewall), default false. Use this flag to enable
- this action.
+--ufw                  Install UFW (Uncomplicated Firewall), default false. Use this flag to enable this action.
 --monitor              Install Mina Monitor, use this flag to enable action
 --archive              Install Mina Archive Node, use this flag to enable action
 --node                 Install NodeJS. Example: --node 16.
---net                  Use mainnet or devnet values to set net type, default mainnet. Example: --ne
-t devnet.
---mina-version         Set Mina version to be installed, default 1.2.0-fe51f1e. Example: --mina-ver
-sion 1.2.0-fe51f1e
---key-folder, --key    Set directory for the Mina keys. Default value is "keys". Example: --key min
-a_keys
+--net                  Use mainnet or devnet values to set net type, default mainnet. Example: --net devnet.
+--mina-version         Set Mina version to be installed, default 1.2.0-fe51f1e. Example: --mina-version 1.2.0-fe51f1e
+--key-folder, --key    Set directory for the Mina keys. Default value is "keys". Example: --key mina_keys
 --key-pass             Set password for Mina Private key
 --user                 Define a user name for Mina owner, default "umina"
 --user-pass            Define a Mina user password
