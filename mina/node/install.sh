@@ -5,7 +5,6 @@ trap cleanup SIGINT SIGTERM ERR EXIT
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
-#SCRIPT_NAME="install.sh"
 
 # Default values
 INSTALL_UFW=false
@@ -13,7 +12,7 @@ INSTALL_MONITOR=false
 NODE_VERSION=0
 MINA_USER=umina
 MINA_USER_PASS=""
-MINA_VERSION="1.2.0-fe51f1e"
+MINA_VERSION="1.2.2-feee67c"
 MINA_KEY=keys
 MINA_KEY_PASS=""
 NET_TARGET=mainnet
