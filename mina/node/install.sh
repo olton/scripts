@@ -235,9 +235,10 @@ install_mina() {
   sudo apt-get -y update -qq
   sudo apt-get -y --allow-downgrades install $mina_package
 
-  installed_mina_version=$("mina version")
+  mina_version_command="mina version"
+  read -a mina_version <<< "$mina_version_command"
 
-  msg "$GREEN We installed Mina version ${installed_mina_version[1]}.$NOFORMAT"
+  msg "$GREEN We installed Mina version ${mina_version[1]}.$NOFORMAT"
 
   su - -c "systemctl --user daemon-reload" $MINA_USER
   su - -c "systemctl --user enable mina" $MINA_USER
