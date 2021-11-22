@@ -237,7 +237,7 @@ install_mina() {
   sudo apt-get -y update -qq
   sudo apt-get -y install $mina_package
 
-  installed_mina_version=($("mina version"))
+  installed_mina_version=$("mina version")
 
   msg "$GREEN We installed Mina version ${installed_mina_version[1]}.$NOFORMAT"
 
