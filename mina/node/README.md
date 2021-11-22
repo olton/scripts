@@ -26,12 +26,13 @@ Available options:
 --node                 Install NodeJS. Example: --node 16.
 --net                  Use mainnet or devnet values to set net type, default mainnet. Example: --net devnet.
 --mina-version         Set Mina version to be installed, default 1.2.0-fe51f1e. Example: --mina-version 1.2.0-fe51f1e
---key-folder, --key    Set directory for the Mina keys. Default value is "keys". Example: --key mina_keys
+--key-folder, --key    Set directory for the Mina keys. Default value is "keys". Example: --key-folder mina_keys
 --key-pass             Set password for Mina Private key
 --user                 Define a user name for Mina owner, default "umina"
 --user-pass            Define a Mina user password
 --ssh-port             Define a ssh port, default 22
 --monitor-port         Define a ssh port, default 8000
+--monitor-folder       Define a folder, where Mina Monitor will be installed, default mina-monitor-server. Example --monitor-folder mina-monitor
 
 For example:
 install.sh --help
