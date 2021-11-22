@@ -208,8 +208,6 @@ create_user() {
 		chmod 600 /home/${MINA_USER}/.ssh/authorized_keys
   fi
 
-  sudo systemctl restart sshd
-
   msg "$CYAN User was created successful.$NOFORMAT"
 }
 
