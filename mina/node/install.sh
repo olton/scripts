@@ -253,7 +253,7 @@ install_mina() {
 	if $INSTALL_ARC; then
 		mina_archive_package="mina-archive=${MINA_VERSION}"
 		msg "$YELLOW We will install Mina Archive $NOFORMAT ${mina_archive_package}"
-		sudo apt-get -y --allow-downgrades install $mina_mina_archive_package
+		sudo apt-get -y --allow-downgrades install $mina_archive_package
 	fi
 
   OLD_IFS=IFS; IFS=" "; read -a mina_version <<< "$(mina version)"; IFS=OLD_IFS
