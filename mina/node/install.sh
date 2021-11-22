@@ -120,6 +120,7 @@ welcome() {
 }
 
 install_pre_requirements() {
+  msg "$CYAN Preparing OS...$NOFORMAT"
   sudo apt -y update
   sudo apt -y full-upgrade
   sudo apt-get install -y apt-transport-https ca-certificates gnupg curl htop mc
@@ -128,6 +129,7 @@ install_pre_requirements() {
   IFS="."
   read -a OS_VERSION <<< $(lbs_release -d | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
   if [ $OS_VERSION[0] -gt 18 ]; then
+	  msg "$CYAN Installing required libs...$NOFORMAT"
     cd
     mkdir -p mina_required_libs
     cd mina_required_libs
@@ -141,7 +143,7 @@ install_pre_requirements() {
 }
 
 install_nodejs() {
-  msg "$CYAN Installing NodeJS!$NOFORMAT"
+  msg "$CYAN Installing NodeJS...$NOFORMAT"
   if [[ "$NODE_VERSION" -ne "0" ]]; then
     if ! which node > /dev/null; then
         #install node & npm - see https://github.com/nodesource/distributions#deb
@@ -157,7 +159,7 @@ install_nodejs() {
 }
 
 install_ufw() {
-  msg "$CYAN Installing UFW!$NOFORMAT"
+  msg "$CYAN Installing UFW...$NOFORMAT"
   if $INSTALL_UFW; then
     if ! which node > /dev/null; then
       sudo apt-get -y install ufw
@@ -198,7 +200,7 @@ create_user() {
 }
 
 install_mina() {
-  msg "$CYAN Installing Mina!$NOFORMAT"
+  msg "$CYAN Installing Mina...$NOFORMAT"
 
   echo "deb [trusted=yes] http://packages.o1test.net stretch stable" | sudo tee /etc/apt/sources.list.d/mina.list
   sudo apt-get update
@@ -217,7 +219,7 @@ install_mina() {
 }
 
 install_mina_env(){
-  msg "$CYAN Create Mina environment!$NOFORMAT"
+  msg "$CYAN Create Mina environment...$NOFORMAT"
 
   mkdir -p /home/${MINA_USER}/$MINA_KEY
   chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/${MINA_KEY}
@@ -234,6 +236,10 @@ install_mina_env(){
 		FILE_LOG_LEVEL=Debug
 		EXTRA_FLAGS=" --block-producer-key /home/${MINA_USER}/${MINA_KEY}/my-wallet --uptime-submitter-key /home/${MINA_USER}/${MINA_KEY}/my-wallet --uptime-url http://34.134.227.208/v1/submit --limited-graphql-port 3095 "
 	EOF
+
+	if $MINA_KEY_PASS; then
+	    sed -i 's/your_password/${MINA_KEYS_PASS}/g' $mina_env_file
+	fi
 
   msg "$GREEN The Mina environment created successful!$NOFORMAT"
   msg "$YELLOW Now, you must set the password in file .mina-env for your keys if you not defined it with command argument --key-pass.$NOFORMAT"
