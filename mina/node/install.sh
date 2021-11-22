@@ -178,16 +178,17 @@ install_ufw() {
   if $INSTALL_UFW; then
     if ! which node > /dev/null; then
       sudo apt-get -y install ufw
-      sudo ufw default deny incoming
-      sudo ufw default allow outgoing
-      sudo ufw allow $SSH_PORT
-      sudo ufw allow 8302/tcp
-      sudo ufw allow 8303/tcp
-      sudo ufw allow $MONITOR_PORT
-      sudo ufw disable
-      sudo ufw enable
-      sudo ufw status
     fi
+
+		sudo ufw default deny incoming
+		sudo ufw default allow outgoing
+		sudo ufw allow $SSH_PORT
+		sudo ufw allow 8302/tcp
+		sudo ufw allow 8303/tcp
+		sudo ufw allow $MONITOR_PORT
+		sudo ufw disable
+		sudo ufw enable
+		sudo ufw status
   fi
 }
 
