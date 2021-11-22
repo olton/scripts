@@ -16,6 +16,7 @@ MINA_VERSION=1.2.0-fe51f1e
 MINA_KEY=keys
 MINA_KEY_PASS=""
 NET_TARGET=mainnet
+SSH_PORT=22
 
 usage() {
 	cat <<- EOF
@@ -35,6 +36,7 @@ usage() {
 		--key-pass      Password for Mina Private key
 		--user          Define a user name for Mina owner, default umina
 		--user-pass     Define a Mina user password
+		--ssh-port      Define a ssh port, default 22
 
 	EOF
   exit
@@ -91,6 +93,10 @@ parse_params() {
       shift
       ;;
     --key_pass)
+      MINA_KEYS_PASS="${2-}"
+      shift
+      ;;
+    --ssh-port)
       MINA_KEYS_PASS="${2-}"
       shift
       ;;
@@ -167,6 +173,7 @@ install_ufw() {
       sudo apt-get -y install ufw
       sudo ufw default deny incoming
       sudo ufw default allow outgoing
+      sudo ufw allow $SSH_PORT
       sudo ufw allow 8302/tcp
       sudo ufw allow 8303/tcp
       sudo ufw allow 8000/tcp
