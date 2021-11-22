@@ -73,6 +73,7 @@ parse_params() {
     -h | --help) usage ;;
     --no-color) NO_COLOR=1 ;;
     --ufw) INSTALL_UFW=true ;;
+    --monitor) INSTALL_MONITOR=true ;;
     --node)
       NODE_VERSION="${2-}"
       shift
