@@ -179,8 +179,8 @@ install_nodejs() {
         DISTRO="$(lsb_release -s -c)"
         echo "deb https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
         echo "deb-src https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
-        sudo apt-get update
-        sudo apt-get install -y nodejs
+			  sudo apt-get -y update -qq
+        sudo apt-get -qq install -y nodejs
     fi
   fi
 }
@@ -215,8 +215,8 @@ install_mina() {
   msg "$CYAN Installing Mina...$NOFORMAT"
 
   echo "deb [trusted=yes] http://packages.o1test.net stretch stable" | sudo tee /etc/apt/sources.list.d/mina.list
-  sudo apt-get update
-  sudo apt-get install -y mina-$NET_TARGET=$MINA_VERSION
+  sudo apt-get -y update -qq
+  sudo apt-get -qq install -y mina-$NET_TARGET=$MINA_VERSION
 
   installed_mina_version=($("mina version"))
 
