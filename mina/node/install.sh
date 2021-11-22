@@ -3,9 +3,9 @@
 set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
-# SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
-# SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
-SCRIPT_NAME="install.sh"
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
+SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
+#SCRIPT_NAME="install.sh"
 
 # Default values
 INSTALL_UFW=false
