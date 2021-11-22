@@ -235,7 +235,7 @@ install_mina() {
 
   echo "deb [trusted=yes] http://packages.o1test.net stretch stable" | sudo tee /etc/apt/sources.list.d/mina.list
   sudo apt-get -y update -qq
-  sudo apt-get -y --allow-downgrade install $mina_package
+  sudo apt-get -y --allow-downgrades install $mina_package
 
   installed_mina_version=$("mina version")
 
