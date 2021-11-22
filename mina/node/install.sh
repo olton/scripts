@@ -248,23 +248,24 @@ install_mina() {
 
   echo "deb [trusted=yes] http://packages.o1test.net stretch stable" | sudo tee /etc/apt/sources.list.d/mina.list
   sudo apt-get -y update -qq
-  sudo apt-get -y --allow-downgrades install $mina_package
+  sudo apt-get -qq -y --allow-downgrades install $mina_package
 
 	if $INSTALL_ARC; then
 		mina_archive_package="mina-archive=${MINA_VERSION}"
 		msg "$YELLOW We will install Mina Archive $NOFORMAT ${mina_archive_package}"
-		sudo apt-get -y --allow-downgrades install $mina_archive_package
+		sudo apt-get -qq -y --allow-downgrades install $mina_archive_package
 	fi
 
   OLD_IFS=IFS; IFS=" "; read -a mina_version <<< "$(mina version)"; IFS=OLD_IFS
 
   msg "$GREEN We installed Mina version ${mina_version[1]}.$NOFORMAT"
 
+  msg "$CYAN Installing Mina Service...$NOFORMAT"
   su - -c "systemctl --user daemon-reload" $MINA_USER
   su - -c "systemctl --user enable mina" $MINA_USER
 
+  msg "$CYAN Enabling linger for ${MINA_USER}...$NOFORMAT"
   sudo loginctl enable-linger $MINA_USER
-
 }
 
 install_mina_env(){
