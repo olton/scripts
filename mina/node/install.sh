@@ -216,7 +216,7 @@ install_mina() {
 
   echo "deb [trusted=yes] http://packages.o1test.net stretch stable" | sudo tee /etc/apt/sources.list.d/mina.list
   sudo apt-get -y update -qq
-  sudo apt-get -qq install -y mina-$NET_TARGET=$MINA_VERSION
+  sudo apt-get -qq install -y mina-${NET_TARGET}=$MINA_VERSION
 
   installed_mina_version=($("mina version"))
 
