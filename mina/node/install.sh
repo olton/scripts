@@ -28,8 +28,7 @@ usage() {
 
 		-h, --help      Print this help and exit
 		--no-color      Disable color output
-		--ufw           Install UFW (Uncomplicated Firewall), default true.
-										Use false to disable this action.
+		--ufw           Install UFW (Uncomplicated Firewall), default true. Use false to disable this action.
 		--node          Install NodeJS
 		--net           Use mainnet or devnet values to set net type, default mainnet
 		--key           Directory for the Mina keys
