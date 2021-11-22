@@ -122,7 +122,7 @@ welcome() {
 install_pre_requirements() {
   msg "$CYAN Preparing OS...$NOFORMAT"
   sudo apt -y update -qq
-  sudo apt-get upgrade -y --force-yes -qq
+  sudo apt -y upgrade -qq
   sudo apt-get install -y apt-transport-https ca-certificates gnupg
   sudo apt-get install -y curl htop mc net-tools unzip
 
