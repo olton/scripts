@@ -92,7 +92,7 @@ parse_params() {
       MINA_KEY="${2-}"
       shift
       ;;
-    --key_pass)
+    --key-pass)
       MINA_KEYS_PASS="${2-}"
       shift
       ;;
@@ -150,22 +150,6 @@ install_pre_requirements() {
   fi
 }
 
-install_nodejs() {
-  msg "$CYAN Installing NodeJS...$NOFORMAT"
-  if [[ "$NODE_VERSION" -ne "0" ]]; then
-    if ! which node > /dev/null; then
-        #install node & npm - see https://github.com/nodesource/distributions#deb
-        curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
-        VERSION=("node_${NODE_VERSION}.x")
-        DISTRO="$(lsb_release -s -c)"
-        echo "deb https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-        echo "deb-src https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
-        sudo apt-get update
-        sudo apt-get install -y nodejs
-    fi
-  fi
-}
-
 install_ufw() {
   msg "$CYAN Installing UFW...$NOFORMAT"
   if $INSTALL_UFW; then
@@ -180,6 +164,23 @@ install_ufw() {
       sudo ufw disable
       sudo ufw enable
       sudo ufw status
+    fi
+  fi
+}
+
+
+install_nodejs() {
+  msg "$CYAN Installing NodeJS...$NOFORMAT"
+  if [[ "$NODE_VERSION" -ne "0" ]]; then
+    if ! which node > /dev/null; then
+        #install node & npm - see https://github.com/nodesource/distributions#deb
+        curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
+        VERSION=("node_${NODE_VERSION}.x")
+        DISTRO="$(lsb_release -s -c)"
+        echo "deb https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+        echo "deb-src https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+        sudo apt-get update
+        sudo apt-get install -y nodejs
     fi
   fi
 }
