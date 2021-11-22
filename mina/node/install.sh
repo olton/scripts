@@ -140,6 +140,7 @@ install_pre_requirements() {
   sudo apt-get -qq install -y apt-transport-https ca-certificates gnupg
   sudo apt-get -qq install -y curl htop mc net-tools unzip
 
+  OLD_IFS=IFS
   IFS="."
   read -a OS_VERSION <<< $(lsb_release -d | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
   if  (( $OS_VERSION > 18 )); then
@@ -154,6 +155,7 @@ install_pre_requirements() {
     cd
     rm -rf mina_required_libs
   fi
+  IFS=OLD_IFS
 }
 
 install_ufw() {
