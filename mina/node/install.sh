@@ -200,9 +200,13 @@ create_user() {
 
   mkdir -p /home/${MINA_USER}/.ssh
   chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/.ssh
-  cp /root/.ssh/authorized_keys /home/${MINA_USER}/.ssh/authorized_keys
-  chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/.ssh/authorized_keys
-  chmod 600 /home/${MINA_USER}/.ssh/authorized_keys
+
+  authorized_keys_file = /root/.ssh/authorized_keys
+  if [[ -f "$authorized_keys_file" ]]; then
+		cp $authorized_keys_file /home/${MINA_USER}/.ssh/authorized_keys
+		chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/.ssh/authorized_keys
+		chmod 600 /home/${MINA_USER}/.ssh/authorized_keys
+  fi
 
   sudo systemctl restart sshd
 
