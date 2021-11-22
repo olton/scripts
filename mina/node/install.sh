@@ -235,7 +235,7 @@ install_mina() {
   sudo apt-get -y update -qq
   sudo apt-get -y --allow-downgrades install $mina_package
 
-  OLD_IFS=IFS; IFS=" "; read -a MINA_VERSION <<< $(mina version | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p'); IFS=OLD_IFS
+  OLD_IFS=IFS; IFS=" "; read -a MINA_VERSION <<< $(mina version); IFS=OLD_IFS
 
   msg "$GREEN We installed Mina version ${MINA_VERSION}.$NOFORMAT"
 
