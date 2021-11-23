@@ -218,6 +218,12 @@ install_nodejs() {
 
 install_monitor() {
 	msg "$CYAN Installing Mina Monitor...$NOFORMAT"
+
+	msg "$CYAN Checking NodeJS...$NOFORMAT"
+	if ! which node > /dev/null; then
+		install_nodejs
+	fi
+
 	MONITOR_TARGET_FOLDER=/home/${MINA_USER}/${MONITOR_FOLDER}
 	MONITOR_SOURCE=https://raw.githubusercontent.com/olton/scripts/${MONITOR_BRANCH}/mina/monitor/server
 	curl -s ${MONITOR_SOURCE}/install.sh | bash -s -- -t $MONITOR_TARGET_FOLDER
