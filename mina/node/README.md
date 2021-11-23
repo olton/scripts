@@ -43,8 +43,8 @@ Available options:
 --monitor-folder       Define a folder, where Mina Monitor will be installed, default mina-monitor-server. Example --monitor-folder mina-monitor
 
 For example:
-install.sh --help
+sudo ./install.sh --help
 
 For example:
-install.sh --node 16 --user umina --user-pass 123 --key-pass 777 --ufw --monitor --archive
+sudo ./install.sh --node 16 --user umina --user-pass 123 --key-pass 777 --ufw --monitor --archive
 ```
