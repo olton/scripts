@@ -285,24 +285,30 @@ install_mina() {
 install_mina_env(){
   msg "$CYAN Create Mina environment...$NOFORMAT"
 
-  mkdir -p /home/${MINA_USER}/$MINA_KEY_FOLDER
-  chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/${MINA_KEY_FOLDER}
-  chmod 700 /home/${MINA_USER}/${MINA_KEY_FOLDER}
-  touch /home/${MINA_USER}/.mina-env
-  chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/.mina-env
+	if [[ ! -d "/home/${MINA_USER}/$MINA_KEY_FOLDER" ]]; then
+		mkdir -p /home/${MINA_USER}/$MINA_KEY_FOLDER
+		chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/${MINA_KEY_FOLDER}
+		chmod 700 /home/${MINA_USER}/${MINA_KEY_FOLDER}
+  fi
+
+  if [[ ! -f "/home/${MINA_USER}/.mina-env" ]]; then
+  	touch /home/${MINA_USER}/.mina-env
+	  chown ${MINA_USER}:${MINA_USER} /home/${MINA_USER}/.mina-env
+  fi
 
   mina_env_file="/home/${MINA_USER}/.mina-env"
+	if [[ -f "$mina_en_file" ]]; then
+		cat <<- EOF > $mina_env_file
+			UPTIME_PRIVKEY_PASS="your_password"
+			CODA_PRIVKEY_PASS="your_password"
+			LOG_LEVEL=Info
+			FILE_LOG_LEVEL=Debug
+			EXTRA_FLAGS=" --block-producer-key /home/${MINA_USER}/${MINA_KEY_FOLDER}/my-wallet --uptime-submitter-key /home/${MINA_USER}/${MINA_KEY_FOLDER}/my-wallet --uptime-url http://34.134.227.208/v1/submit --limited-graphql-port 3095 "
+		EOF
 
-  cat <<- EOF > $mina_env_file
-		UPTIME_PRIVKEY_PASS="your_password"
-		CODA_PRIVKEY_PASS="your_password"
-		LOG_LEVEL=Info
-		FILE_LOG_LEVEL=Debug
-		EXTRA_FLAGS=" --block-producer-key /home/${MINA_USER}/${MINA_KEY_FOLDER}/my-wallet --uptime-submitter-key /home/${MINA_USER}/${MINA_KEY_FOLDER}/my-wallet --uptime-url http://34.134.227.208/v1/submit --limited-graphql-port 3095 "
-	EOF
-
-	if [[ ! -z "$MINA_KEY_PASS" ]]; then
-	    sed -i "s/your_password/${MINA_KEYS_PASS}/g" $mina_env_file
+		if [[ ! -z "$MINA_KEY_PASS" ]]; then
+				sed -i "s/your_password/${MINA_KEYS_PASS}/g" $mina_env_file
+		fi
 	fi
 
   msg "$GREEN Setup complete!$NOFORMAT"
@@ -318,6 +324,15 @@ install_sidecar() {
 	sidecar_package="mina-bp-stats-sidecar=${MINA_VERSION}"
 	msg "$YELLOW We will install Mina Sidecar $NOFORMAT ${sidecar_package}"
 	sudo apt-get -y --allow-downgrades install $sidecar_package &>/dev/null
+
+	sidecar_config=/etc/mina-sidecar.json
+
+	cat <<- EOF > $sidecar_config
+	{
+    "uploadURL": "https://us-central1-mina-mainnet-303900.cloudfunctions.net/block-producer-stats-ingest/?token=72941420a9595e1f4006e2f3565881b5",
+    "nodeURL": "http://127.0.0.1:3095"
+  }
+	EOF
 }
 
 # --- Setup ---
