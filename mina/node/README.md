@@ -2,8 +2,8 @@
 
 The script is designed to quickly install the Mina node on Ubuntu 18.x, 20.x, ...
 This script will install:
-- [x] UFW
-- [x] NodeJS
+- [x] UFW (Uncomplicated Firewall) and setup it
+- [x] NodeJS specified version
 - [x] Mina Monitor
 - [x] Mina
 - [x] Mina environment
@@ -41,6 +41,7 @@ Available options:
 --ssh-port             Define a ssh port, default 22
 --monitor-port         Define a ssh port, default 8000
 --monitor-folder       Define a folder, where Mina Monitor will be installed, default mina-monitor-server. Example --monitor-folder mina-monitor
+--monitor-branch       Define a branch, where where from Mina Monitor will be installed, default master. Example --monitor-branch dev
 
 For example:
 sudo ./install.sh --help

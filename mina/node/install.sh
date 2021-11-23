@@ -20,6 +20,7 @@ NET_TARGET=mainnet
 SSH_PORT=22
 MONITOR_PORT=8000
 MONITOR_FOLDER="mina-monitor-server"
+MONITOR_BRANCH=master
 
 usage() {
 	cat <<- EOF
@@ -44,6 +45,7 @@ usage() {
 		--ssh-port             Define a ssh port, which will be opened in UFW, default 22
 		--monitor-port         Define a Mina Monitor port, which will be opened in UFW, default 8000
 		--monitor-folder       Define a folder, where Mina Monitor will be installed, default mina-monitor-server
+		--monitor-branch       Define a branch, where where from Mina Monitor will be installed, default master. Example --monitor-branch dev
 
 		For example:
 		${SCRIPT_NAME} --help
@@ -125,6 +127,10 @@ parse_params() {
       ;;
     --monitor-folder)
       MONITOR_FOLDER="${2-}"
+      shift
+      ;;
+    --monitor-branch)
+      MONITOR_BRANCH="${2-}"
       shift
       ;;
     -?*) die "Unknown option: $1" ;;
@@ -214,7 +220,8 @@ install_monitor() {
 	if $INSTALL_MONITOR; then
     msg "$CYAN Installing Mina Monitor...$NOFORMAT"
 		MONITOR_TARGET_FOLDER=/home/${MINA_USER}/${MONITOR_FOLDER}
-		curl -s https://raw.githubusercontent.com/olton/scripts/master/mina/monitor/server/install.sh | bash -s -- -t $MONITOR_TARGET_FOLDER
+		MONITOR_SOURCE=https://raw.githubusercontent.com/olton/scripts/${MONITOR_BRANCH}/mina/monitor/server
+		curl -s ${MONITOR_SOURCE}/install.sh | bash -s -- -t $MONITOR_TARGET_FOLDER
 	fi
 }
 
