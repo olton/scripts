@@ -13,6 +13,7 @@ The script is designed to quickly install the Mina node on **Ubuntu 18.x, 20.x, 
 - [x] Install Mina (you can specify version and network)
 - [x] Install Mina Archive Node
 - [x] Install Mina Key Generator
+- [ ] Install Mina Sidecar ?
 - [x] Setup Mina environment (create `.mina-env` file with content)
 - [x] Create required folders and files (excluding Mina wallet keys)
 - [x] Setup Mina Service (on behalf of the created user)
