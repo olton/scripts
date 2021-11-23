@@ -68,9 +68,15 @@ Example, run from sudoers user:
 sudo ./install.sh --help
 ```
 
+Example, run from sudoers user:
+```shell
+sudo ./install.sh 1.2.2-feee67c
+```
+
 Example, run with arguments:
 ```shell
 sudo ./install.sh \ 
+  --mina 1.2.2-feee67c \
   --net mainnet \ 
   --user umina \ 
   --user-pass 123 \

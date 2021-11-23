@@ -14,7 +14,7 @@ INSTALL_SIDECAR=false
 NODE_VERSION=16
 MINA_USER=umina
 MINA_USER_PASS=""
-MINA_VERSION="1.2.2-feee67c"
+MINA_VERSION=""
 MINA_KEY_FOLDER=keys
 MINA_KEY_PASS=""
 NET_TARGET=mainnet
@@ -40,8 +40,8 @@ usage() {
 		--archive              Install Mina Archive Node, use this flag to enable action
 		--sidecar              Install Mina Sidecar, use this flag to enable action
 		--node                 Install NodeJS. Default will be installed 16.x LTS. Example: --node 16.
-		--net                  Use mainnet or devnet values to set net type, default mainnet. Example: --net devnet.
-		--mina-version         Set Mina version to be installed, default 1.2.0-fe51f1e. Example: --mina-version 1.2.0-fe51f1e
+		--net                  Use "mainnet" or "devnet" values to set net type, default "mainnet".
+		--mina, --mina-version Set Mina version to be installed. Example: --mina-version "1.2.2-feee67c"
 		--key-folder, --key    Set directory for the Mina keys. Default value is "keys". Example: --key mina_keys
 		--key-pass             Set password for Mina Private key
 		--user                 Define a user name for Mina owner, default "umina"
@@ -55,6 +55,9 @@ usage() {
 
 		For example:
 		${SCRIPT_NAME} --help
+
+		For example:
+		${SCRIPT_NAME} 1.2.2-feee67c
 
 		For example:
 		${SCRIPT_NAME} --node 16 --user umina --user-pass 123 --key-pass 777 --ufw --monitor --archive
@@ -112,7 +115,7 @@ parse_params() {
       NET_TARGET="${2-}"
       shift
       ;;
-    --mina-version)
+    --mina | --mina-version)
       MINA_VERSION="${2-}"
       shift
       ;;
@@ -157,8 +160,18 @@ parse_params() {
   args=("$@")
 
 #  check required params and arguments
-#  [[ -z "${param-}" ]] && die "Missing required parameter: param"
+#  [[ -z "${MINA_VERSION}" ]] && die "Missing required parameter: --mina-version"
 #  [[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
+
+  if [[ -z "${MINA_VERSION}" && ${#args[@]} -eq 0 ]]; then
+		die "Missing required parameter! You must specify a Mina version with a parameters --mina or --mina-version or first positioned argument."
+  fi
+
+  if [[ -z "${MINA_VERSION}" ]]; then
+  	MINA_VERSION=$args
+  fi
+
+  echo -e "Specified version is: ${MINA_VERSION}"
 
   return 0
 }
@@ -368,7 +381,7 @@ install_sidecar() {
 
 parse_params "$@"
 setup_colors
-
+exit
 # --- Start process ---
 
 welcome
