@@ -17,13 +17,16 @@ The script is designed to quickly install the Mina node on **Ubuntu 18.x, 20.x, 
 
 > Now in develop...
 
+## Usage:
+
+### Get script
 ```shell
 wget https://raw.githubusercontent.com/olton/scripts/install-mina/mina/node/install.sh -v -N -O install-mina.sh
 chmod 755 ./install-mina.sh
 ./install-mina.sh --help
 ```
 
-### Usage:
+### Run script
 ```
 install.sh [OPTIONS]...
 
