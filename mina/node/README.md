@@ -29,7 +29,7 @@ chmod 755 ./install-mina.sh
 ./install-mina.sh --help
 ```
 
-#### Run script
+#### Man script
 ```
 install.sh [OPTIONS]...
 
