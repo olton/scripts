@@ -42,6 +42,7 @@ Available options:
 --ufw                  Install UFW (Uncomplicated Firewall). Use this flag to enable this action.
 --monitor              Install Mina Monitor, use this flag to enable action
 --archive              Install Mina Archive Node, use this flag to enable action
+--sidecar              Install Mina Sidecar, use this flag to enable action
 --node                 Install NodeJS. Default - 16. Example: --node 17.
 --net                  Use mainnet or devnet values to set net type, default mainnet. Example: --net devnet.
 --mina-version         Set Mina version to be installed, default 1.2.2-feee67c. Example: --mina-version 1.2.0-fe51f1e
