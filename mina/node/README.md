@@ -53,8 +53,8 @@ Available options:
 --monitor-port         Define a ssh port, default 8000
 --monitor-folder       Define a folder, where Mina Monitor will be installed, default mina-monitor-server. Example --monitor-folder mina-monitor
 --monitor-branch       Define a branch, where where from Mina Monitor will be installed, default master. Example --monitor-branch dev
---sidecar-version	   Define a sidecar version, if not define, script will use Mina version
---archive-version	   Define a Mina Archive Node version, if not define, script will use Mina version
+--sidecar-version      Define a sidecar version, if not define, script will use Mina version
+--archive-version      Define a Mina Archive Node version, if not define, script will use Mina version
 ```
 
 Example, run from `root`:
