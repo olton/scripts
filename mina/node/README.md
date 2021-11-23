@@ -1,14 +1,19 @@
 # Install the Mina node
 
-The script is designed to quickly install the Mina node on Ubuntu 18.x, 20.x, ...
-This script will install:
-- [x] UFW (Uncomplicated Firewall) and setup it
-- [x] NodeJS specified version
-- [x] Mina Monitor
-- [x] Mina
-- [x] Mina environment
-- [x] Required folders and files
-- [x] Mina Service
+The script is designed to quickly install the Mina node on **Ubuntu 18.x, 20.x, ...**. 
+
+#### This script will do:
+
+- [x] Install UFW (Uncomplicated Firewall) and setup it
+- [x] Install NodeJS specified version
+- [x] Install Mina Monitor
+- [x] Create user for Mina (you can specify name and password)
+- [x] Install Mina (you can specify version and network)
+- [x] Install Mina Archive Node
+- [x] Install Mina Key Generator
+- [x] Setup Mina environment (create `.mina-env` file with content)
+- [x] Create required folders and files (excluding Mina wallet keys)
+- [x] Setup Mina Service (on behalf of the created user)
 
 > Now in develop...
 
@@ -31,7 +36,7 @@ Available options:
 --ufw                  Install UFW (Uncomplicated Firewall), default false. Use this flag to enable this action.
 --monitor              Install Mina Monitor, use this flag to enable action
 --archive              Install Mina Archive Node, use this flag to enable action
---node                 Install NodeJS. Example: --node 16.
+--node                 Install NodeJS. Default - 16. Example: --node 17.
 --net                  Use mainnet or devnet values to set net type, default mainnet. Example: --net devnet.
 --mina-version         Set Mina version to be installed, default 1.2.0-fe51f1e. Example: --mina-version 1.2.0-fe51f1e
 --key-folder, --key    Set directory for the Mina keys. Default value is "keys". Example: --key-folder mina_keys

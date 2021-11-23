@@ -266,6 +266,12 @@ install_mina() {
 		sudo apt-get -y --allow-downgrades install $mina_archive_package &>/dev/null
 	fi
 
+  if true; then
+		mina_keygen_package="mina-generate-keypair=${MINA_VERSION}"
+		msg "$YELLOW We will install Mina Key Generator $NOFORMAT ${mina_keygen_package}"
+		sudo apt-get -y --allow-downgrades install $mina_keygen_package &>/dev/null
+  fi
+
   OLD_IFS=IFS; IFS=" "; read -a mina_version <<< "$(mina version)"; IFS=OLD_IFS
 
   msg "$GREEN We installed Mina version ${mina_version[1]}.$NOFORMAT"
