@@ -10,6 +10,7 @@ SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
 INSTALL_UFW=false
 INSTALL_MONITOR=false
 INSTALL_ARC=false
+INSTALL_SIDECAR=false
 NODE_VERSION=16
 MINA_USER=umina
 MINA_USER_PASS=""
@@ -35,6 +36,7 @@ usage() {
 		--ufw                  Install UFW (Uncomplicated Firewall), default false. Use this flag to enable this action.
 		--monitor              Install Mina Monitor, use this flag to enable action
 		--archive              Install Mina Archive Node, use this flag to enable action
+		--sidecar              Install Mina Sidecar, use this flag to enable action
 		--node                 Install NodeJS. Default will be installed 16.x LTS. Example: --node 16.
 		--net                  Use mainnet or devnet values to set net type, default mainnet. Example: --net devnet.
 		--mina-version         Set Mina version to be installed, default 1.2.0-fe51f1e. Example: --mina-version 1.2.0-fe51f1e
@@ -89,6 +91,7 @@ parse_params() {
     --ufw) INSTALL_UFW=true ;;
     --monitor) INSTALL_MONITOR=true ;;
     --archive) INSTALL_ARC=true ;;
+    --sidecar) INSTALL_SIDECAR=true ;;
     --node)
       NODE_VERSION="${2-}"
       shift
@@ -183,46 +186,41 @@ install_pre_requirements() {
 
 install_ufw() {
   msg "$CYAN Installing UFW...$NOFORMAT"
-  if $INSTALL_UFW; then
-    if ! which node > /dev/null; then
-      sudo apt-get -y install ufw &>/dev/null
-    fi
 
-		sudo ufw default deny incoming
-		sudo ufw default allow outgoing
-		sudo ufw allow $SSH_PORT
-		sudo ufw allow 8302/tcp
-		sudo ufw allow 8303/tcp
-		sudo ufw allow $MONITOR_PORT
-		sudo ufw disable
-		sudo ufw enable
-		sudo ufw status
-  fi
+	if ! which node > /dev/null; then
+		sudo apt-get -y install ufw &>/dev/null
+	fi
+
+	sudo ufw default deny incoming
+	sudo ufw default allow outgoing
+	sudo ufw allow $SSH_PORT
+	sudo ufw allow 8302/tcp
+	sudo ufw allow 8303/tcp
+	sudo ufw allow $MONITOR_PORT
+	sudo ufw disable
+	sudo ufw enable
+	sudo ufw status
 }
 
 install_nodejs() {
   msg "$CYAN Installing NodeJS...$NOFORMAT"
-  if [[ "$NODE_VERSION" -ne "0" ]]; then
-    if ! which node > /dev/null; then
-			#install node & npm - see https://github.com/nodesource/distributions#deb
-			curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
-			VERSION=("node_${NODE_VERSION}.x")
-			DISTRO="$(lsb_release -s -c)"
-			echo "deb https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-			echo "deb-src https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
-			sudo apt-get -y update &>/dev/null
-			sudo apt-get -y install nodejs &>/dev/null
-    fi
-  fi
+	if ! which node > /dev/null; then
+		#install node & npm - see https://github.com/nodesource/distributions#deb
+		curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
+		VERSION=("node_${NODE_VERSION}.x")
+		DISTRO="$(lsb_release -s -c)"
+		echo "deb https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+		echo "deb-src https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+		sudo apt-get -y update &>/dev/null
+		sudo apt-get -y install nodejs &>/dev/null
+	fi
 }
 
 install_monitor() {
-	if $INSTALL_MONITOR; then
-    msg "$CYAN Installing Mina Monitor...$NOFORMAT"
-		MONITOR_TARGET_FOLDER=/home/${MINA_USER}/${MONITOR_FOLDER}
-		MONITOR_SOURCE=https://raw.githubusercontent.com/olton/scripts/${MONITOR_BRANCH}/mina/monitor/server
-		curl -s ${MONITOR_SOURCE}/install.sh | bash -s -- -t $MONITOR_TARGET_FOLDER
-	fi
+	msg "$CYAN Installing Mina Monitor...$NOFORMAT"
+	MONITOR_TARGET_FOLDER=/home/${MINA_USER}/${MONITOR_FOLDER}
+	MONITOR_SOURCE=https://raw.githubusercontent.com/olton/scripts/${MONITOR_BRANCH}/mina/monitor/server
+	curl -s ${MONITOR_SOURCE}/install.sh | bash -s -- -t $MONITOR_TARGET_FOLDER
 }
 
 create_user() {
@@ -315,17 +313,44 @@ install_mina_env(){
   msg " systemctl --user start mina"
 }
 
+install_sidecar() {
+	echo -e -n "$CYAN Installing sidecar...$NOFORMAT"
+	sidecar_package="mina-bp-stats-sidecar=${MINA_VERSION}"
+	msg "$YELLOW We will install Mina Sidecar $NOFORMAT ${sidecar_package}"
+	sudo apt-get -y --allow-downgrades install $sidecar_package &>/dev/null
+}
+
+# --- Setup ---
+
 parse_params "$@"
 setup_colors
 
+# --- Start process ---
+
 welcome
+
 install_pre_requirements
-install_ufw
-install_nodejs
+
+if $INSTALL_UFW; then
+	install_ufw
+fi
+
 create_user
-install_monitor
+
 install_mina
 install_mina_env
 
+if [[ "$NODE_VERSION" -ne "0" ]]; then
+	install_nodejs
+fi
+
+if $INSTALL_MONITOR; then
+	install_monitor
+fi
+
+if $INSTALL_SIDECAR; then
+	install_sidecar
+fi
+
 cleanup
-# End of script
+# --- End of script ---
