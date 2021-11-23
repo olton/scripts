@@ -381,7 +381,7 @@ install_sidecar() {
 
 parse_params "$@"
 setup_colors
-exit
+
 # --- Start process ---
 
 welcome
