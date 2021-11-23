@@ -44,7 +44,7 @@ Available options:
 --archive              Install Mina Archive Node, use this flag to enable action
 --node                 Install NodeJS. Default - 16. Example: --node 17.
 --net                  Use mainnet or devnet values to set net type, default mainnet. Example: --net devnet.
---mina-version         Set Mina version to be installed, default 1.2.0-fe51f1e. Example: --mina-version 1.2.0-fe51f1e
+--mina-version         Set Mina version to be installed, default 1.2.2-feee67c. Example: --mina-version 1.2.0-fe51f1e
 --key-folder, --key    Set directory for the Mina keys. Default value is "keys". Example: --key-folder mina_keys
 --key-pass             Set password for Mina Private key
 --user                 Define a user name for Mina owner, default "umina"
@@ -69,5 +69,14 @@ sudo ./install.sh --help
 
 Example, run with arguments:
 ```shell
-sudo ./install.sh --node 16 --user umina --user-pass 123 --key-pass 777 --ufw --monitor --archive
+sudo ./install.sh \ 
+  --net mainnet \ 
+  --user umina \ 
+  --user-pass 123 \
+  --key-folder keys \ 
+  --key-pass 777 \ 
+  --ufw \ 
+  --monitor \ 
+  --archive \
+  --sidecar 
 ```
