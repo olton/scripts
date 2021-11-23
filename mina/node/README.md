@@ -9,12 +9,12 @@ The script is designed to quickly install the Mina node on **Ubuntu 18.x, 20.x, 
 - [x] Install UFW (Uncomplicated Firewall) and setup it
 - [x] Create user for Mina (you can specify name and password)
 - [x] Install Mina (you can specify version and network)
-- [x] Install Mina Archive Node (if needed)
-- [x] Install Mina Key Generator (if needed)
-- [x] Install Mina Sidecar (if needed)
+- [x] Install Mina Archive Node 
+- [x] Install Mina Key Generator
+- [x] Install Mina Sidecar
 - [x] Install NodeJS specified version
-- [x] Install Mina Monitor (if needed)
-- [x] Setup Mina environment (create `.mina-env` file with content)
+- [x] Install Mina Monitor
+- [x] Setup Mina environment (create `.mina-env` file with content, set key password, if it specified)
 - [x] Create required folders and files (excluding Mina wallet keys)
 - [x] Setup Mina Service (on behalf of the created user)
 
@@ -39,7 +39,7 @@ Available options:
 
 -h, --help             Print this help and exit
 --no-color             Disable color output
---ufw                  Install UFW (Uncomplicated Firewall), default false. Use this flag to enable this action.
+--ufw                  Install UFW (Uncomplicated Firewall). Use this flag to enable this action.
 --monitor              Install Mina Monitor, use this flag to enable action
 --archive              Install Mina Archive Node, use this flag to enable action
 --node                 Install NodeJS. Default - 16. Example: --node 17.

@@ -22,6 +22,8 @@ SSH_PORT=22
 MONITOR_PORT=8000
 MONITOR_FOLDER="mina-monitor-server"
 MONITOR_BRANCH=master
+SIDECAR_VERSION=""
+MINA_ARCHIVE_VERSION=""
 
 usage() {
 	cat <<- EOF
@@ -48,6 +50,8 @@ usage() {
 		--monitor-port         Define a Mina Monitor port, which will be opened in UFW, default 8000
 		--monitor-folder       Define a folder, where Mina Monitor will be installed, default mina-monitor-server
 		--monitor-branch       Define a branch, where where from Mina Monitor will be installed, default master. Example --monitor-branch dev
+		--sidecar-version			 Define a sidecar version, if not define, script will use Mina version
+		--archive-version			 Define a Mina Archive Node version, if not define, script will use Mina version
 
 		For example:
 		${SCRIPT_NAME} --help
@@ -134,6 +138,14 @@ parse_params() {
       ;;
     --monitor-branch)
       MONITOR_BRANCH="${2-}"
+      shift
+      ;;
+    --sidecar-version)
+      SIDECAR_VERSION="${2-}"
+      shift
+      ;;
+    --archive-version)
+      MINA_ARCHIVE_VERSION="${2-}"
       shift
       ;;
     -?*) die "Unknown option: $1" ;;
@@ -265,7 +277,12 @@ install_mina() {
   sudo apt-get -y --allow-downgrades install $mina_package &>/dev/null
 
 	if $INSTALL_ARC; then
-		mina_archive_package="mina-archive=${MINA_VERSION}"
+		archive_ver=$MINA_VERSION
+		if [[ ! -z "$MINA_ARCHIVE_VERSION" ]]; then
+			archive_ver=$MINA_ARCHIVE_VERSION
+		fi
+
+		mina_archive_package="mina-archive=${archive_ver}"
 		msg "$YELLOW We will install Mina Archive $NOFORMAT ${mina_archive_package}"
 		sudo apt-get -y --allow-downgrades install $mina_archive_package &>/dev/null
 	fi
@@ -327,7 +344,13 @@ install_mina_env(){
 
 install_sidecar() {
 	echo -e -n "$CYAN Installing sidecar...$NOFORMAT"
-	sidecar_package="mina-bp-stats-sidecar=${MINA_VERSION}"
+
+	sidecar_ver=$MINA_VERSION
+	if [[ ! -z "$SIDECAR_VERSION" ]]; then
+  	sidecar_ver=$SIDECAR_VERSION
+  fi
+
+	sidecar_package="mina-bp-stats-sidecar=${sidecar_ver}"
 	msg "$YELLOW We will install Mina Sidecar $NOFORMAT ${sidecar_package}"
 	sudo apt-get -y --allow-downgrades install $sidecar_package &>/dev/null
 
