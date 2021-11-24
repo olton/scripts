@@ -43,6 +43,7 @@ Available options:
 --monitor              Install Mina Monitor, use this flag to enable action
 --archive              Install Mina Archive Node, use this flag to enable action
 --sidecar              Install Mina Sidecar, use this flag to enable action
+--keygen               Install Mina Key Generator, use this flag to enable action
 --node                 Install NodeJS. Default - 16. Example: --node 17.
 --net                  Use mainnet or devnet values to set net type, default mainnet. Example: --net devnet.
 --mina, --mina-version Set Mina version to be installed. Example: --mina-version 1.2.0-fe51f1e
@@ -85,5 +86,6 @@ sudo ./install.sh \
   --ufw \ 
   --monitor \ 
   --archive \
-  --sidecar 
+  --sidecar \ 
+  --keygen
 ```

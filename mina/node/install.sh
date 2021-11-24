@@ -6,25 +6,6 @@ trap cleanup SIGINT SIGTERM ERR EXIT
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
 
-# Default values
-INSTALL_UFW=false
-INSTALL_MONITOR=false
-INSTALL_ARC=false
-INSTALL_SIDECAR=false
-NODE_VERSION=16
-MINA_USER=umina
-MINA_USER_PASS=""
-MINA_VERSION=""
-MINA_KEY_FOLDER=keys
-MINA_KEY_PASS=""
-NET_TARGET=mainnet
-SSH_PORT=22
-MONITOR_PORT=8000
-MONITOR_FOLDER="mina-monitor-server"
-MONITOR_BRANCH=master
-SIDECAR_VERSION=""
-MINA_ARCHIVE_VERSION=""
-
 usage() {
 	cat <<- EOF
 		Usage: $SCRIPT_NAME [OPTIONS]...
@@ -39,6 +20,7 @@ usage() {
 		--monitor              Install Mina Monitor, use this flag to enable action
 		--archive              Install Mina Archive Node, use this flag to enable action
 		--sidecar              Install Mina Sidecar, use this flag to enable action
+		--keygen               Install Mina Key Generator, use this flag to enable action
 		--node                 Install NodeJS. Default will be installed 16.x LTS. Example: --node 16.
 		--net                  Use "mainnet" or "devnet" values to set net type, default "mainnet".
 		--mina, --mina-version Set Mina version to be installed. Example: --mina-version "1.2.2-feee67c"
@@ -65,6 +47,26 @@ usage() {
 	EOF
   exit
 }
+
+# Default values
+INSTALL_UFW=false
+INSTALL_MONITOR=false
+INSTALL_ARC=false
+INSTALL_SIDECAR=false
+INSTALL_KEYGEN=false
+NODE_VERSION=16
+MINA_USER=umina
+MINA_USER_PASS=""
+MINA_VERSION=""
+MINA_KEY_FOLDER=keys
+MINA_KEY_PASS=""
+NET_TARGET=mainnet
+SSH_PORT=22
+MONITOR_PORT=8000
+MONITOR_FOLDER="mina-monitor-server"
+MONITOR_BRANCH=master
+SIDECAR_VERSION=""
+MINA_ARCHIVE_VERSION=""
 
 cleanup() {
   trap - SIGINT SIGTERM ERR EXIT
@@ -99,6 +101,7 @@ parse_params() {
     --monitor) INSTALL_MONITOR=true ;;
     --archive) INSTALL_ARC=true ;;
     --sidecar) INSTALL_SIDECAR=true ;;
+    --keygen) INSTALL_KEYGEN=true ;;
     --node)
       NODE_VERSION="${2-}"
       shift
@@ -159,10 +162,6 @@ parse_params() {
 
   args=("$@")
 
-#  check required params and arguments
-#  [[ -z "${MINA_VERSION}" ]] && die "Missing required parameter: --mina-version"
-#  [[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
-
   if [[ -z "${MINA_VERSION}" && ${#args[@]} -eq 0 ]]; then
 		die "Missing required parameter! You must specify a Mina version with a parameters --mina or --mina-version or first positioned argument."
   fi
@@ -170,8 +169,6 @@ parse_params() {
   if [[ -z "${MINA_VERSION}" ]]; then
   	MINA_VERSION=$args
   fi
-
-  echo -e "Specified version is: ${MINA_VERSION}"
 
   return 0
 }
@@ -237,7 +234,7 @@ install_nodejs() {
 		echo "deb https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 		echo "deb-src https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
 		sudo apt-get -y update &>/dev/null
-		sudo apt-get -y install nodejs &>/dev/null
+		sudo apt-get -y --allow-downgrades install nodejs &>/dev/null
 	fi
 }
 
@@ -300,7 +297,7 @@ install_mina() {
 		sudo apt-get -y --allow-downgrades install $mina_archive_package &>/dev/null
 	fi
 
-  if true; then
+  if $INSTALL_KEYGEN; then
 		mina_keygen_package="mina-generate-keypair=${MINA_VERSION}"
 		msg "$YELLOW We will install Mina Key Generator $NOFORMAT ${mina_keygen_package}"
 		sudo apt-get -y --allow-downgrades install $mina_keygen_package &>/dev/null
@@ -375,6 +372,8 @@ install_sidecar() {
     "nodeURL": "http://127.0.0.1:3095"
   }
 	EOF
+
+	sudo systemctl enable mina-bp-stats-sidecar
 }
 
 # --- Setup ---
