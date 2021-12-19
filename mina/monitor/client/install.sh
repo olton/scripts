@@ -19,7 +19,7 @@ fi
 IFS="."
 read -a NODE_VERSION <<< $(node -v | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
 
-if ! [ $NODE_VERSION[0] > 13 ]; then
+if ! (( $NODE_VERSION[0] > 13 )); then
   echo -e "$RED Error! NodeJS version is not a valid! You must use version NodeJS >= 14.${COLOR_STOP}"
   exit
 fi
