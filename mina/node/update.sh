@@ -17,7 +17,7 @@ usage() {
 		-h, --help                  Print this help and exit
 		--no-color                  Disable color output
 		--user                      Define a Mina owner
-		--net                       Define a Mina network
+		--net, --network            Define a Mina network
 		--mina, --mina-version      Set Mina version to update
 		--archive										Use this flag to update archive node
 		--sidecar										Use this flag to update sidecar
@@ -76,7 +76,7 @@ parse_params() {
       MINA_VERSION="${2-}"
       shift
       ;;
-    --net)
+    --net | --network)
       MINA_NETWORK="${2-}"
       shift
       ;;
@@ -111,7 +111,7 @@ welcome() {
 
 stop_services() {
   echo -e -n "$CYAN Stopping Mina...$NOFORMAT"
-	if [[ -z "$MINA_USER"  ]]; then
+	if [[ -z "$MINA_USER" ]]; then
 		systemctl --user stop mina
 	else
 		su - -c "systemctl --user stop mina" $MINA_USER
@@ -119,7 +119,7 @@ stop_services() {
 
   if $UPDATE_ARCHIVE; then
   echo -e -n "$CYAN Stopping Mina Archive...$NOFORMAT"
-		if [[ -z "$MINA_USER"  ]]; then
+		if [[ -z "$MINA_USER" ]]; then
 			systemctl --user stop mina-archive
 		else
 			su - -c "systemctl --user stop mina-archive" $MINA_USER
@@ -128,7 +128,7 @@ stop_services() {
 
   if $UPDATE_SIDECAR; then
     echo -e -n "$CYAN Stopping Sidecar...$NOFORMAT"
-		if [[ -z "$MINA_USER"  ]]; then
+		if [[ -z "$MINA_USER" ]]; then
 			systemctl --user stop mina-bp-stats-sidecar
 		else
 			su - -c "systemctl --user stop mina-bp-stats-sidecar" $MINA_USER
@@ -168,38 +168,43 @@ update_services() {
 }
 
 start_services() {
-  echo -e -n "$CYAN Starting Mina...$NOFORMAT"
-	if [[ -z "$MINA_USER"  ]]; then
+  echo -e -n "$CYAN Reload systemd daemon...$NOFORMAT"
+	if [[ -z "$MINA_USER" ]]; then
 		systemctl --user daemon-reload
-		systemctl --user start mina
 	else
 		su - -c "systemctl --user daemon-reload" $MINA_USER
+	fi
+
+  echo -e -n "$CYAN Starting Mina...$NOFORMAT"
+	if [[ -z "$MINA_USER" ]]; then
+		systemctl --user start mina
+	else
 		su - -c "systemctl --user start mina" $MINA_USER
 	fi
 
   if $UPDATE_ARCHIVE; then
     echo -e -n "$CYAN Starting Mina Archive...$NOFORMAT"
-		if [[ -z "$MINA_USER"  ]]; then
-  		systemctl --user daemon-reload
+		if [[ -z "$MINA_USER" ]]; then
 			systemctl --user start mina-archive
 		else
-  		su - -c "systemctl --user daemon-reload" $MINA_USER
 			su - -c "systemctl --user start mina-archive" $MINA_USER
 		fi
   fi
 
   if $UPDATE_SIDECAR; then
     echo -e -n "$CYAN Starting Sidecar...$NOFORMAT"
-		if [[ -z "$MINA_USER"  ]]; then
-  		systemctl --user daemon-reload
+		if [[ -z "$MINA_USER" ]]; then
 			systemctl --user start mina-bp-stats-sidecar
 		else
-  		su - -c "systemctl --user daemon-reload" $MINA_USER
 			su - -c "systemctl --user mina-bp-stats-sidecar" $MINA_USER
 		fi
   fi
 
 	return 0
+}
+
+bye() {
+	msg "${YELLOW} Mina updating process complete! Have a nice day! Bye!${NOFORMAT}"
 }
 
 parse_params "$@"
@@ -210,5 +215,7 @@ welcome
 stop_services
 update_services
 start_services
+
+bye
 
 cleanup

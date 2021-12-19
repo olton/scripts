@@ -22,7 +22,7 @@ usage() {
 		--sidecar              Install Mina Sidecar, use this flag to enable action
 		--keygen               Install Mina Key Generator, use this flag to enable action
 		--node                 Install NodeJS. Default will be installed 16.x LTS. Example: --node 16.
-		--net                  Use "mainnet" or "devnet" values to set net type, default "mainnet".
+		--net, --network       Use "mainnet" or "devnet" values to set net type, default "mainnet".
 		--mina, --mina-version Set Mina version to be installed. Example: --mina-version "1.2.2-feee67c"
 		--key-folder, --key    Set directory for the Mina keys. Default value is "keys". Example: --key mina_keys
 		--key-pass             Set password for Mina Private key
@@ -114,7 +114,7 @@ parse_params() {
       MINA_USER_PASS="${2-}"
       shift
       ;;
-    --net)
+    --net | --network)
       NET_TARGET="${2-}"
       shift
       ;;

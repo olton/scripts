@@ -45,7 +45,7 @@ Available options:
 --sidecar              Install Mina Sidecar, use this flag to enable action
 --keygen               Install Mina Key Generator, use this flag to enable action
 --node                 Install NodeJS. Default - 16. Example: --node 17.
---net                  Use mainnet or devnet values to set net type, default mainnet. Example: --net devnet.
+--net, --network       Use mainnet or devnet values to set net type, default mainnet. Example: --net devnet.
 --mina, --mina-version Set Mina version to be installed. Example: --mina-version 1.2.0-fe51f1e
 --key-folder, --key    Set directory for the Mina keys. Default value is "keys". Example: --key-folder mina_keys
 --key-pass             Set password for Mina Private key
@@ -78,7 +78,7 @@ Example, run with arguments:
 ```shell
 sudo ./install.sh \ 
   --mina 1.2.2-feee67c \
-  --net mainnet \ 
+  --network mainnet \ 
   --user umina \ 
   --user-pass 123 \
   --key-folder keys \ 
