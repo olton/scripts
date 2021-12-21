@@ -376,6 +376,14 @@ install_sidecar() {
 	sudo systemctl enable mina-bp-stats-sidecar
 }
 
+stop_services() {
+	systemctl --user stop mina
+	systemctl --user stop mina-archive
+	systemctl --user stop mina-bp-stats-sidecar
+
+	msg "$YELLOW Services stopped! After installation will complete, you must run services manually. $NOFORMAT"
+}
+
 # --- Setup ---
 
 parse_params "$@"
@@ -384,7 +392,7 @@ setup_colors
 # --- Start process ---
 
 welcome
-
+stop_services
 install_pre_requirements
 
 if $INSTALL_UFW; then

@@ -17,16 +17,16 @@ if ! which node > /dev/null; then
 fi
 
 IFS="."
-read -a NODE_VERSION <<< $(node -v | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
+read -r -a NODE_VERSION <<< $(node -v | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
 
-echo -ne " You have version installed $YELLOW $NODE_VERSION $COLOR_STOP "
+echo -ne " You have version installed ${YELLOW}${NODE_VERSION}${COLOR_STOP}"
 
-if ! (( $NODE_VERSION >= 14 )); then
+if ! (( "${NODE_VERSION[0]}" >= 14 )); then
   echo -e "$RED Error! NodeJS version is not a valid! You must use version NodeJS >= 14.${COLOR_STOP}"
   exit
 fi
 
-echo -e "$GREEN...OK... \033[0m"
+echo -e "$GREEN it's OK${COLOR_STOP}"
 
 TARGET="mina-monitor-cluster"
 BRANCH="master"
@@ -39,7 +39,7 @@ do
   esac
 done
 
-echo -e "$YELLOW We are installing Mina Monitor Client from branch $BRANCH into ~/$TARGET ${COLOR_STOP}"
+echo -e "$YELLOW We are installing Mina Monitor Client from branch ${GREEN}$BRANCH${COLOR_STOP} into ${GREEN}$TARGET${COLOR_STOP}"
 echo -e "$YELLOW Installing Mina Monitor Cluster...${COLOR_STOP}"
 echo -e "$YELLOW Creating a target directory...${COLOR_STOP}"
 
