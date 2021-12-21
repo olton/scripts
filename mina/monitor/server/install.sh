@@ -9,7 +9,7 @@ echo -e "$GREEN Welcome to Mina Monitor Server installer!${COLOR_STOP}"
 echo -e "$GREEN Copyright 2021 by Serhii Pimenov <serhii@pimenov.com.ua>${COLOR_STOP}"
 read -p " If you are ready, press [Enter] key to start or Ctrl+C to stop..."
 
-echo -ne "$YELLOW Check NodeJS:${COLOR_STOP}"
+echo -ne "$YELLOW Check NodeJS:\033[0m"
 
 if ! which node > /dev/null; then
   echo -e "$RED Error! NodeJS not installed! Please install NodeJS v14+ and try again.${COLOR_STOP}"
@@ -17,16 +17,16 @@ if ! which node > /dev/null; then
 fi
 
 IFS="."
-read -a NODE_VERSION <<< $(node -v | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
+read -r -a NODE_VERSION <<< $(node -v | sed -nre 's/^[^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p')
 
-echo -ne " You have version installed $YELLOW $NODE_VERSION $COLOR_STOP "
+echo -ne " You have version installed ${YELLOW}${NODE_VERSION}${COLOR_STOP}"
 
-if ! (( $NODE_VERSION >= 14 )); then
+if ! (( "${NODE_VERSION[0]}" >= 14 )); then
   echo -e "$RED Error! NodeJS version is not a valid! You must use version NodeJS >= 14.${COLOR_STOP}"
   exit
 fi
 
-echo -e "$GREEN...OK... ${COLOR_STOP}"
+echo -e "$GREEN it's OK${COLOR_STOP}"
 
 TARGET="mina-monitor-server"
 BRANCH="master"
